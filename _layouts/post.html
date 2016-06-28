@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<div class="main-post">  <!-- main post view-->
+
+<center>
+	<h1 class="post-title">
+
+	{{ page.title }}
+
+	</h1>
+
+</center>
+
+<br />
+		{{ content }}
+
+
+	<time class="post-date" datetime="{{ page.date | date_to_xmlschema }}"><small>{{ page.date | date: "%b %-d, %Y" }}</small></time>
+
+
+</div>

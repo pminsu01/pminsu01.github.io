@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+{% include head.html %}
+</head>
+
+<body>
+
+<header id="site-header">
+{% include header.html %}
+</header>
+
+<nav id="site-nav">
+  {% include navigator.html %}
+</nav>
+
+<div id ="site-size">
+
+ 				<!-- header , navigator.html  seperate-->
+
+<br>
+<main id="main-post">
+ {{content}}
+</main>
+</br>
+
+
+<br>
+<footer id="site-footer">
+{% include footer.html %}
+</footer>
+</br>
+
+
+</div>
+
+
+</body>
+
+
+</html>

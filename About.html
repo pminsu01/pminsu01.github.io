@@ -1,0 +1,22 @@
+---
+
+title: About
+
+permalink: /About/
+
+---
+
+{% for post in site.categories.About %}
+
+   <li>
+
+		<a href="{{post.url}}">
+        {{post.title}}</a>
+
+
+    </li>
+
+
+    
+
+{% endfor %}
