@@ -1,10 +1,10 @@
 ---
-title : Sublime text Setting
+title : Sublime Text Setting
 category : Setting
 layout : post
 ---
 
-Sublime text3 setting
+Sublime Text3 Setting
 
 
 ```
