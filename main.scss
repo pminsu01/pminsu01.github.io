@@ -5,12 +5,14 @@
 
 #site-size{
 
-  
+
   width:1000px;
   margin:0 auto;
 
 
 }
+
+
 
 @mixin media-query($device) {
     @media screen and (max-width: $device) {
@@ -21,6 +23,8 @@
 
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
+
+        "index",
         "variables",
         "header",
         "navigator",
