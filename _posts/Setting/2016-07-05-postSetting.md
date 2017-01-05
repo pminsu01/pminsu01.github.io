@@ -18,4 +18,5 @@ create table blog (
  6  days date,      // 날짜 저장
  7  constraint pk_post primary key(post_num)
  8  );
+ 
 ```
