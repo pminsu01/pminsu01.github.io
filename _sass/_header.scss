@@ -1,7 +1,21 @@
 #site-header {
 
   padding-top: 50px;
-  background-color: #7ad2ea;
+
+  background-image: url("../images/background.jpg");
+
+
+  #main_id {
+    font-size:  150px;
+    color : white;
+    font-style:oblique;
+  }
+
+  #home_link {
+    font-size: 30px;
+    color: white;
+  }
+
   span{
     font-size: 20px;
     font-style: italic;

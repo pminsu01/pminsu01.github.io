@@ -29,7 +29,7 @@ layout : post
  try {
 
 	 Class.forName("oracle.jdbc.driver.OracleDriver");
-	 conn =DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:pminsu2", "pminsu01" , "qnddj5418");	// 데이터베이스 연결
+	 conn =DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:pminsu2", "pminsu01" , "비밀번호");	// 데이터베이스 연결
 	 stmt =conn.createStatement();
 	 rs = stmt.executeQuery("select *from info");
 
