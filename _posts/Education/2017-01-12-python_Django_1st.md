@@ -1,7 +1,7 @@
 ---
 category : Education
 
-title: Python_Django 첫번째 프로젝트 시작하기
+title: Python_Django 첫번째 프로젝트 시작하기_1st
 
 layout: post
 
