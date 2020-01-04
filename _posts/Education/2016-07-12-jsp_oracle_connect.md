@@ -1,6 +1,6 @@
 ---
 
-title : JDBC 활용하여 Oracle DB와 연결 하기
+title : JDBC 활용하여 OracleDB와 연결
 
 category: Education
 

@@ -2,7 +2,7 @@
 
 category: Education
 
-title: python_Django 3nd
+title: Python_Django 첫번째 프로젝트 시작하기_03
 
 layout: post
 ---
