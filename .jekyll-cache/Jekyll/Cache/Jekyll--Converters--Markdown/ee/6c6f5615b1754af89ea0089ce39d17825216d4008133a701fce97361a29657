@@ -1,0 +1,118 @@
+I"<p><a href="https://pminsu01.github.io/2017-python_Django/" title="첫번째 프로젝트">Python_Django 첫번째 프로젝트 시작하기_1st</a></p>
+
+<p>에서 Django 설치까지는 완료하였다.</p>
+
+<p>간단한 블로그 제작을 통해 Django 프로젝트를 시작해본다. 장고의 기본 구성을 할 것이다. 그 파일을 다른곳으로 옮기면 안되고 <br />
+특정한 구조를 유지해야 한다고 한다.<br />
+첫번째로 가상환경이 설치 되어 있는 디렉토리로 이동한다. 나 같은 경우에는 Dropbox에 설정하였으므로</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dropbox/Study/Python
+</code></pre></div></div>
+
+<p>으로 이동한다.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django-admin startproject mysite .
+
+</code></pre></div></div>
+
+<p>명령어 창에 입력한다. django-admin으로 mysite라는 이름으로 프로젝트 시작(?) 명령어 끝에 마침표 반드시 붙여야한다.<br />
+공부하면서 보는 블로그 설명에 따르면<br />
+점 . 은 디렉토리에 장고를 설치하라고 스크립트에 알려주기 때문에 중요하다고한다.(?)<br />
+설치된 디렉토리 형식은</p>
+
+<p>Python<br />
+  ㄴ db.sqlite3<br />
+  ㄴ manage.py<br />
+  ㄴ mysite<br />
+        ㄴ__init__.py  <br />
+        ㄴsetting.py <br />
+        ㄴurl.py<br />
+        ㄴwsgi.py<br />
+  로 구성되어 있다.</p>
+
+<h2 id="구성-정보">구성 정보</h2>
+
+<ol>
+  <li>
+    <p>manage.py<br />
+ 사이트 관리를 도와주는 역할을 한다. 이 스크립트로 다른 작업 없이 컴퓨터에 웹 서버를 시작할 수 있다.</p>
+  </li>
+  <li>
+    <p>setting.py<br />
+ 웹사이트 설정 스크립트</p>
+  </li>
+  <li>
+    <p>db.sqlite3<br />
+ 사이트 내의 데이터를 저장하기 위한 DB</p>
+  </li>
+</ol>
+
+<h2 id="설정해야-할것">설정해야 할것</h2>
+
+<ol>
+  <li>
+    <p>setting.py에 가서<br />
+Time_ZONE = ‘Asia/seoul’</p>
+  </li>
+  <li>
+    <p>정적파일 경로 추가<br />
+STATIC_ROOT = os.path.join(BASE_DIR, ‘static’)   =&gt; 아직 이해 불가</p>
+  </li>
+  <li>
+    <p>db.sqlite3</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DATABASES = {    
+    'default': {      
+        'ENGINE': 'django.db.backends.sqlite3',      
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),      
+    }    
+}    
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>설정 완료</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python manage.py migrate
+</code></pre></div></div>
+
+<p>설정을 마친 다음에 명령어 입력<br />
+ ㅡ</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Operations to perform:
+  Synchronize unmigrated apps: staticfiles, messages
+  Apply all migrations: admin, contenttypes, auth, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+  Installing custom SQL...
+Running migrations:
+  No migrations to apply.
+
+</code></pre></div></div>
+
+<p>적용 완료 및 구성을 완료한다</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python manage.py runserver
+
+</code></pre></div></div>
+
+<p>명령어 입력시</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Performing system checks...
+
+System check identified no issues (0 silenced).
+January 18, 2017 - 00:58:07
+Django version 1.8, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+</code></pre></div></div>
+
+<p>로컬 ip로 8000번 포트로 서버가 실행된다.</p>
+
+<p><img src="/images/python/1.png" alt="1.image" title="1" /></p>
+
+<p>완성</p>
+:ET

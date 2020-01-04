@@ -1,5 +1,5 @@
 ---
-title : Sublime Text Setting
+title : 서브라인 텍스트 관련
 category : Setting
 layout : post
 ---

@@ -1,0 +1,338 @@
+I"n1<p>이번에 GDG가서 FireBase 라는 백엔드 역할을 하는 툴을 소개 받았다.
+약을 팔러 즉 FireBase 홍보를 들었었는데 매우 도움이 되는 툴인 것 같아 한번 살펴보려고 한다.
+IOS와 안드로이드 그리고 웹을 한정하는 것이 아닌 교차로 할 수 있다는 점이 매력적인 것 같다.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mspark@ubuntu:~$ npm install -g firebase-tools
+프로그램 'npm'을(를) 설치하지 않습니다. 다음을 입력해 설치할 수 있습니다:
+sudo apt install npm
+mspark@ubuntu:~$ sudo apt install npm
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo npm install -g firebase-tools
+</code></pre></div></div>
+
+<p>npm WARN deprecated node-uuid@1.4.7: use uuid module instead
+/usr/local/bin/firebase -&gt; /usr/local/lib/node_modules/firebase-tools/bin/firebase
+/usr/local/lib
+└─┬ firebase-tools@3.2.1
+  ├─┬ archiver@0.16.0
+  │ ├── async@1.4.2
+  │ ├── buffer-crc32@0.2.13
+  │ ├─┬ glob@5.0.15
+  │ │ ├─┬ inflight@1.0.6
+  │ │ │ └── wrappy@1.0.2
+  │ │ └── once@1.4.0
+  │ ├── lazystream@0.1.0
+  │ ├── lodash@3.10.1
+  │ ├─┬ readable-stream@1.0.34
+  │ │ ├── core-util-is@1.0.2
+  │ │ ├── isarray@0.0.1
+  │ │ └── string_decoder@0.10.31
+  │ ├─┬ tar-stream@1.2.2
+  │ │ ├─┬ bl@1.2.0
+  │ │ │ └─┬ readable-stream@2.2.2
+  │ │ │   └── isarray@1.0.0
+  │ │ ├─┬ end-of-stream@1.1.0
+  │ │ │ └── once@1.3.3
+  │ │ └─┬ readable-stream@2.2.2
+  │ │   ├── buffer-shims@1.0.0
+  │ │   ├── isarray@1.0.0
+  │ │   ├── process-nextick-args@1.0.7
+  │ │   └── util-deprecate@1.0.2
+  │ └─┬ zip-stream@0.6.0
+  │   ├─┬ compress-commons@0.3.0
+  │   │ ├── crc32-stream@0.3.4
+  │   │ └── node-int64@0.4.0
+  │   └── lodash@3.10.1
+  ├─┬ chalk@1.1.3
+  │ ├── ansi-styles@2.2.1
+  │ ├── escape-string-regexp@1.0.5
+  │ ├── has-ansi@2.0.0
+  │ ├── strip-ansi@3.0.1
+  │ └── supports-color@2.0.0
+  ├─┬ cjson@0.3.3
+  │ └─┬ json-parse-helpfulerror@1.0.3
+  │   └── jju@1.3.0
+  ├─┬ cli-table@0.3.1
+  │ └── colors@1.0.3
+  ├─┬ commander@2.9.0
+  │ └── graceful-readlink@1.0.1
+  ├─┬ configstore@1.4.0
+  │ ├── graceful-fs@4.1.11
+  │ ├─┬ mkdirp@0.5.1
+  │ │ └── minimist@0.0.8
+  │ ├── object-assign@4.1.1
+  │ ├── os-tmpdir@1.0.2
+  │ ├── osenv@0.1.4
+  │ ├── uuid@2.0.3
+  │ ├─┬ write-file-atomic@1.3.1
+  │ │ ├── imurmurhash@0.1.4
+  │ │ └── slide@1.1.6
+  │ └── xdg-basedir@2.0.0
+  ├─┬ cross-spawn@4.0.2
+  │ ├─┬ lru-cache@4.0.2
+  │ │ ├── pseudomap@1.0.2
+  │ │ └── yallist@2.0.0
+  │ └─┬ which@1.2.12
+  │   └── isexe@1.1.2
+  ├─┬ csv-streamify@3.0.4
+  │ └─┬ through2@2.0.1
+  │   └─┬ readable-stream@2.0.6
+  │     └── isarray@1.0.0
+  ├── didyoumean@1.2.1
+  ├── exit-code@1.0.2
+  ├── filesize@3.4.1
+  ├─┬ firebase@2.4.2
+  │ └─┬ faye-websocket@0.9.3
+  │   └─┬ websocket-driver@0.5.2
+  │     └── websocket-extensions@0.1.1
+  ├─┬ fs-extra@0.23.1
+  │ ├── jsonfile@2.4.0
+  │ ├── path-is-absolute@1.0.1
+  │ └─┬ rimraf@2.5.4
+  │   └── glob@7.1.1
+  ├─┬ fstream-ignore@1.0.5
+  │ ├── fstream@1.0.10
+  │ ├── inherits@2.0.3
+  │ └─┬ minimatch@3.0.3
+  │   └─┬ brace-expansion@1.1.6
+  │     ├── balanced-match@0.4.2
+  │     └── concat-map@0.0.1
+  ├─┬ inquirer@0.12.0
+  │ ├── ansi-escapes@1.4.0
+  │ ├── ansi-regex@2.1.1
+  │ ├─┬ cli-cursor@1.0.2
+  │ │ └─┬ restore-cursor@1.0.1
+  │ │   ├── exit-hook@1.1.1
+  │ │   └── onetime@1.1.0
+  │ ├── cli-width@2.1.0
+  │ ├── figures@1.7.0
+  │ ├─┬ readline2@1.0.1
+  │ │ ├── code-point-at@1.1.0
+  │ │ ├─┬ is-fullwidth-code-point@1.0.0
+  │ │ │ └── number-is-nan@1.0.1
+  │ │ └── mute-stream@0.0.5
+  │ ├── run-async@0.1.0
+  │ ├── rx-lite@3.1.2
+  │ └── string-width@1.0.2
+  ├── jsonschema@1.1.1
+  ├─┬ JSONStream@1.3.0
+  │ ├── jsonparse@1.3.0
+  │ └── through@2.3.8
+  ├─┬ jsonwebtoken@5.7.0
+  │ ├─┬ jws@3.1.4
+  │ │ ├── base64url@2.0.0
+  │ │ ├─┬ jwa@1.1.5
+  │ │ │ ├── buffer-equal-constant-time@1.0.1
+  │ │ │ └── ecdsa-sig-formatter@1.0.9
+  │ │ └── safe-buffer@5.0.1
+  │ ├── ms@0.7.2
+  │ └── xtend@4.0.1
+  ├── lodash@4.17.4
+  ├── open@0.0.5
+  ├─┬ portfinder@0.4.0
+  │ └── async@0.9.0
+  ├── progress@1.1.8
+  ├─┬ request@2.79.0
+  │ ├── aws-sign2@0.6.0
+  │ ├── aws4@1.5.0
+  │ ├── caseless@0.11.0
+  │ ├─┬ combined-stream@1.0.5
+  │ │ └── delayed-stream@1.0.0
+  │ ├── extend@3.0.0
+  │ ├── forever-agent@0.6.1
+  │ ├─┬ form-data@2.1.2
+  │ │ └── asynckit@0.4.0
+  │ ├─┬ har-validator@2.0.6
+  │ │ ├─┬ is-my-json-valid@2.15.0
+  │ │ │ ├── generate-function@2.0.0
+  │ │ │ ├─┬ generate-object-property@1.2.0
+  │ │ │ │ └── is-property@1.0.2
+  │ │ │ └── jsonpointer@4.0.1
+  │ │ └─┬ pinkie-promise@2.0.1
+  │ │   └── pinkie@2.0.4
+  │ ├─┬ hawk@3.1.3
+  │ │ ├── boom@2.10.1
+  │ │ ├── cryptiles@2.0.5
+  │ │ ├── hoek@2.16.3
+  │ │ └── sntp@1.0.9
+  │ ├─┬ http-signature@1.1.1
+  │ │ ├── assert-plus@0.2.0
+  │ │ ├─┬ jsprim@1.3.1
+  │ │ │ ├── extsprintf@1.0.2
+  │ │ │ ├── json-schema@0.2.3
+  │ │ │ └── verror@1.3.6
+  │ │ └─┬ sshpk@1.10.2
+  │ │   ├── asn1@0.2.3
+  │ │   ├── assert-plus@1.0.0
+  │ │   ├── bcrypt-pbkdf@1.0.0
+  │ │   ├─┬ dashdash@1.14.1
+  │ │   │ └── assert-plus@1.0.0
+  │ │   ├── ecc-jsbn@0.1.1
+  │ │   ├─┬ getpass@0.1.6
+  │ │   │ └── assert-plus@1.0.0
+  │ │   ├── jodid25519@1.0.2
+  │ │   ├── jsbn@0.1.0
+  │ │   └── tweetnacl@0.14.5
+  │ ├── is-typedarray@1.0.0
+  │ ├── isstream@0.1.2
+  │ ├── json-stringify-safe@5.0.1
+  │ ├─┬ mime-types@2.1.14
+  │ │ └── mime-db@1.26.0
+  │ ├── oauth-sign@0.8.2
+  │ ├── qs@6.3.0
+  │ ├── stringstream@0.0.5
+  │ ├─┬ tough-cookie@2.3.2
+  │ │ └── punycode@1.4.1
+  │ └── tunnel-agent@0.4.3
+  ├── rsvp@3.3.3
+  ├── semver@5.3.0
+  ├─┬ superstatic@4.0.3
+  │ ├── as-array@2.0.0
+  │ ├── async@1.5.2
+  │ ├── basic-auth-connect@1.0.0
+  │ ├── char-spinner@1.0.1
+  │ ├── compare-semver@1.1.0
+  │ ├─┬ compression@1.6.2
+  │ │ ├─┬ accepts@1.3.3
+  │ │ │ └── negotiator@0.6.1
+  │ │ ├── bytes@2.3.0
+  │ │ ├── compressible@2.0.9
+  │ │ ├─┬ debug@2.2.0
+  │ │ │ └── ms@0.7.1
+  │ │ └── vary@1.1.0
+  │ ├─┬ connect@3.5.0
+  │ │ ├─┬ finalhandler@0.5.0
+  │ │ │ ├── escape-html@1.0.3
+  │ │ │ ├── statuses@1.3.1
+  │ │ │ └── unpipe@1.0.0
+  │ │ ├── parseurl@1.3.1
+  │ │ └── utils-merge@1.0.0
+  │ ├─┬ connect-query@0.2.0
+  │ │ └── qs@1.1.0
+  │ ├── destroy@1.0.4
+  │ ├── fast-url-parser@1.1.3
+  │ ├─┬ fs-extra@0.30.0
+  │ │ └── klaw@1.3.1
+  │ ├─┬ glob@7.1.1
+  │ │ └── fs.realpath@1.0.0
+  │ ├─┬ glob-slasher@1.0.1
+  │ │ ├── glob-slash@1.0.0
+  │ │ ├─┬ lodash.isobject@2.4.1
+  │ │ │ └── lodash._objecttypes@2.4.1
+  │ │ └─┬ toxic@1.0.0
+  │ │   └── lodash@2.4.2
+  │ ├── home-dir@1.0.0
+  │ ├── is-url@1.2.2
+  │ ├─┬ join-path@1.1.1
+  │ │ ├── url-join@0.0.1
+  │ │ └── valid-url@1.0.9
+  │ ├─┬ morgan@1.7.0
+  │ │ ├── basic-auth@1.0.4
+  │ │ └── depd@1.1.0
+  │ ├─┬ nash@2.0.4
+  │ │ ├─┬ flat-arguments@1.0.2
+  │ │ │ ├── array-flatten@1.1.1
+  │ │ │ ├─┬ as-array@1.0.0
+  │ │ │ │ ├── lodash.isarguments@2.4.1
+  │ │ │ │ ├── lodash.isobject@2.4.1
+  │ │ │ │ └─┬ lodash.values@2.4.1
+  │ │ │ │   └─┬ lodash.keys@2.4.1
+  │ │ │ │     ├── lodash._isnative@2.4.1
+  │ │ │ │     └── lodash._shimkeys@2.4.1
+  │ │ │ ├── lodash.isarguments@3.1.0
+  │ │ │ └── lodash.isobject@3.0.2
+  │ │ ├── lodash@3.10.1
+  │ │ └── minimist@1.2.0
+  │ ├─┬ on-finished@2.3.0
+  │ │ └── ee-first@1.1.1
+  │ ├── on-headers@1.0.1
+  │ ├── path-to-regexp@1.7.0
+  │ ├─┬ router@1.1.4
+  │ │ ├── array-flatten@2.0.0
+  │ │ ├── methods@1.1.2
+  │ │ ├── path-to-regexp@0.1.7
+  │ │ └── setprototypeof@1.0.0
+  │ ├── string-length@1.0.1
+  │ ├── try-require@1.2.1
+  │ └─┬ update-notifier@1.0.3
+  │   ├─┬ boxen@0.6.0
+  │   │ ├── ansi-align@1.1.0
+  │   │ ├── camelcase@2.1.1
+  │   │ ├── cli-boxes@1.0.0
+  │   │ ├── filled-array@1.1.0
+  │   │ ├── repeating@2.0.1
+  │   │ └── widest-line@1.0.0
+  │   ├─┬ configstore@2.1.0
+  │   │ ├─┬ dot-prop@3.0.0
+  │   │ │ └── is-obj@1.0.1
+  │   │ └── uuid@2.0.3
+  │   ├─┬ latest-version@2.0.0
+  │   │ └─┬ package-json@2.4.0
+  │   │   ├─┬ got@5.7.1
+  │   │   │ ├─┬ create-error-class@3.0.2
+  │   │   │ │ └── capture-stack-trace@1.0.0
+  │   │   │ ├─┬ duplexer2@0.1.4
+  │   │   │ │ └─┬ readable-stream@2.2.2
+  │   │   │ │   └── isarray@1.0.0
+  │   │   │ ├── is-retry-allowed@1.1.0
+  │   │   │ ├── node-status-codes@1.0.0
+  │   │   │ ├─┬ parse-json@2.2.0
+  │   │   │ │ └─┬ error-ex@1.3.0
+  │   │   │ │   └── is-arrayish@0.2.1
+  │   │   │ ├─┬ readable-stream@2.2.2
+  │   │   │ │ └── isarray@1.0.0
+  │   │   │ ├── timed-out@3.1.3
+  │   │   │ ├── unzip-response@1.0.2
+  │   │   │ └── url-parse-lax@1.0.0
+  │   │   └── registry-auth-token@3.1.0
+  │   └── lazy-req@1.1.0
+  ├─┬ tar@2.2.1
+  │ └── block-stream@0.0.9
+  ├── tmp@0.0.27
+  ├─┬ universal-analytics@0.3.11
+  │ ├── async@0.2.10
+  │ ├── node-uuid@1.4.7
+  │ └── underscore@1.8.3
+  ├─┬ update-notifier@0.5.0
+  │ ├── is-npm@1.0.0
+  │ ├─┬ latest-version@1.0.1
+  │ │ └─┬ package-json@1.2.0
+  │ │   ├─┬ got@3.3.1
+  │ │   │ ├─┬ duplexify@3.5.0
+  │ │   │ │ ├─┬ end-of-stream@1.0.0
+  │ │   │ │ │ └── once@1.3.3
+  │ │   │ │ ├─┬ readable-stream@2.2.2
+  │ │   │ │ │ └── isarray@1.0.0
+  │ │   │ │ └── stream-shift@1.0.0
+  │ │   │ ├── infinity-agent@2.0.3
+  │ │   │ ├── is-redirect@1.0.0
+  │ │   │ ├── is-stream@1.1.0
+  │ │   │ ├── lowercase-keys@1.0.0
+  │ │   │ ├── nested-error-stacks@1.0.2
+  │ │   │ ├── object-assign@3.0.0
+  │ │   │ ├── prepend-http@1.0.4
+  │ │   │ ├─┬ read-all-stream@3.1.0
+  │ │   │ │ └─┬ readable-stream@2.2.2
+  │ │   │ │   └── isarray@1.0.0
+  │ │   │ └── timed-out@2.0.0
+  │ │   └─┬ registry-url@3.1.0
+  │ │     └─┬ rc@1.1.6
+  │ │       ├── deep-extend@0.4.1
+  │ │       ├── ini@1.3.4
+  │ │       ├── minimist@1.2.0
+  │ │       └── strip-json-comments@1.0.4
+  │ ├─┬ repeating@1.1.3
+  │ │ └── is-finite@1.0.2
+  │ └── semver-diff@2.1.0
+  ├─┬ user-home@2.0.0
+  │ └── os-homedir@1.0.2
+  ├── uuid@3.0.1
+  └─┬ winston@1.1.2
+    ├── async@1.0.0
+    ├── cycle@1.0.3
+    ├── eyes@0.1.8
+    ├── pkginfo@0.3.1
+    └── stack-trace@0.0.9</p>
+:ET

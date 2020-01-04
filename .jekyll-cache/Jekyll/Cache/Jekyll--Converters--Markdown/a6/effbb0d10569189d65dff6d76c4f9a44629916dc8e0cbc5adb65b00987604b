@@ -1,0 +1,58 @@
+I"�<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="err">%@</span> <span class="na">page</span> <span class="na">language=</span><span class="s">"java"</span> <span class="na">contentType=</span><span class="s">"text/html; charset=EUC-KR"</span>
+    <span class="na">pageEncoding=</span><span class="s">"utf-8"</span><span class="err">%</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;</span><span class="err">%@</span> <span class="na">page</span> <span class="na">import=</span><span class="s">"java.sql.*, java.util.*"</span> <span class="err">%</span><span class="nt">&gt;</span>
+<span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=EUC-KR"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>Insert title here<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+ <span class="nt">&lt;</span><span class="err">%</span>
+
+ <span class="na">Connection</span> <span class="na">conn =</span><span class="s">null;</span>
+ <span class="na">Statement</span> <span class="na">stmt = </span><span class="s">null;</span>
+ <span class="na">ResultSet</span> <span class="na">rs =</span><span class="s">null;</span>
+
+ <span class="na">try</span> <span class="err">{</span>
+
+	 <span class="na">Class</span><span class="err">.</span><span class="na">forName</span><span class="err">("</span><span class="na">oracle</span><span class="err">.</span><span class="na">jdbc</span><span class="err">.</span><span class="na">driver</span><span class="err">.</span><span class="na">OracleDriver</span><span class="err">");</span>
+	 <span class="na">conn =</span><span class="s">DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:pminsu2",</span> <span class="err">"</span><span class="na">pminsu01</span><span class="err">"</span> <span class="err">,</span> <span class="err">"비밀번호");</span>	<span class="err">//</span> <span class="err">데이터베이스</span> <span class="err">연결</span>
+	 <span class="na">stmt =</span><span class="s">conn.createStatement();</span>
+	 <span class="na">rs = </span><span class="s">stmt.executeQuery("select</span> <span class="na">*from</span> <span class="na">info</span><span class="err">");</span>
+
+	<span class="err">//</span> <span class="err">노트북에서</span> <span class="err">연결</span> <span class="err">완료</span> <span class="err">확인</span>
+	 <span class="na">while</span><span class="err">(</span><span class="na">rs</span><span class="err">.</span><span class="na">next</span><span class="err">())</span> <span class="err">{</span>
+
+
+		 <span class="na">out</span><span class="err">.</span><span class="na">println</span><span class="err">("이름</span> <span class="na">:</span><span class="err">"</span> <span class="err">+</span><span class="na">rs</span><span class="err">.</span><span class="na">getString</span><span class="err">("</span><span class="na">name</span><span class="err">"));</span>
+		 <span class="na">out</span><span class="err">.</span><span class="na">println</span><span class="err">("주민등록번호</span> <span class="na">:</span> <span class="err">"</span> <span class="err">+</span> <span class="na">rs</span><span class="err">.</span><span class="na">getInt</span><span class="err">("</span><span class="na">birth</span><span class="err">"));</span>
+		 <span class="na">out</span><span class="err">.</span><span class="na">println</span><span class="err">("전화번호"</span> <span class="err">+</span> <span class="na">rs</span><span class="err">.</span><span class="na">getString</span><span class="err">("</span><span class="na">phone</span><span class="err">"));</span>
+		 <span class="na">out</span><span class="err">.</span><span class="na">println</span><span class="err">("사는</span> <span class="err">곳</span><span class="na">:</span> <span class="err">"</span> <span class="err">+</span> <span class="na">rs</span><span class="err">.</span><span class="na">getString</span><span class="err">("</span><span class="na">location</span><span class="err">"));</span>
+
+
+
+
+	 <span class="err">}</span>
+ <span class="err">}</span>
+
+ <span class="na">catch</span><span class="err">(</span><span class="na">Exception</span> <span class="na">e</span><span class="err">)</span> <span class="err">{</span>
+
+	 <span class="na">e</span><span class="err">.</span><span class="na">printStackTrace</span><span class="err">();</span>
+	 <span class="na">out</span><span class="err">.</span><span class="na">println</span><span class="err">("</span><span class="na">fail</span><span class="err">");</span>
+ <span class="err">}</span>
+
+
+ <span class="na">finally</span> <span class="err">{</span>
+
+	 <span class="na">if</span><span class="err">(</span><span class="na">null</span> <span class="err">!=</span> <span class="na">stmt</span><span class="err">)</span> <span class="na">stmt</span><span class="err">.</span><span class="na">close</span><span class="err">();</span>
+	 <span class="na">if</span><span class="err">(</span><span class="na">null</span> <span class="err">!=</span> <span class="na">rs</span><span class="err">)</span><span class="na">rs</span><span class="err">.</span><span class="na">close</span><span class="err">();</span>
+	 <span class="na">if</span><span class="err">(</span><span class="na">null</span> <span class="err">!=</span> <span class="na">conn</span><span class="err">)</span><span class="na">conn</span><span class="err">.</span><span class="na">close</span><span class="err">();</span>
+ <span class="err">}</span>
+
+ <span class="err">%</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+:ET

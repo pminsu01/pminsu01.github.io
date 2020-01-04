@@ -1,0 +1,9 @@
+I"t<p>Django 슈퍼 유저 생성하기</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(myvenv) ubunms@Ubunms:~/Dropbox/Study/Python$ python manage.py createsuperuser
+Username (leave blank to use 'ubunms'): pminsu2
+Email address: pminsu01@naver.com
+Password:
+Password (again):
+Superuser created successfully.
+</code></pre></div></div>
+:ET

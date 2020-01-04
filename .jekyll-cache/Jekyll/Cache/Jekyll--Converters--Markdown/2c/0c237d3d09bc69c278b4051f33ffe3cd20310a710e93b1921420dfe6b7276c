@@ -1,0 +1,33 @@
+I"(<p>Sublime Text3 Setting</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
+	"font_face": "Consolas",
+	"font_size": 11,
+	"ignored_packages":
+	[
+		"Vintage"
+	]
+}
+</code></pre></div></div>
+
+<p>패키지를 설치 해야하는 것</p>
+
+<ol>
+  <li>
+    <p>sidebar enchancements</p>
+  </li>
+  <li>
+    <p>sublime linter</p>
+  </li>
+  <li>
+    <p>JSlint</p>
+  </li>
+  <li>
+    <p>Bracket Highlighter</p>
+  </li>
+  <li>
+    <p>Emmet</p>
+  </li>
+</ol>
+:ET
