@@ -9,13 +9,12 @@ permalink: /IT/
 
 {% for post in site.categories.IT %}
 
-    <li>
-
-   		<a href="{{post.url}}">
-   		{{post.title}}</a>
-
-    </li>
-
-    <br/>
+<br/>
+<li>
+	<a href="{{post.url}}">
+      {{post.title}}
+  </a> &nbsp;
+	  <span class="post-meta" style="font-size:medium;">{{ post.date | date: "%b %-d, %Y" }}</span>
+</li>
 
 {% endfor %}
