@@ -1,15 +1,15 @@
-I"T
+I"
 <h3 id="1-nvidia-graphic-card-driver-install">1. NVIDIA Graphic Card Driver Install</h3>
 
 <h3 id="2-nvdia-cuda-toolkit-install">2. NVDIA-CUDA-toolkit Install</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install nvidia-cuda-toolkit
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install nvidia-cuda-toolkit
 
 </code></pre></div></div>
 
 <h3 id="3-tensorflow-gpu-version-install">3. Tensorflow GPU Version Install</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Ubuntu/Linux 64-bit, CPU 전용, Python 2.7
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Ubuntu/Linux 64-bit, CPU 전용, Python 2.7
 $ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.9.0-cp27-none-linux_x86_64.whl
 
 # Ubuntu/Linux 64-bit, GPU 버전, Python 2.7
@@ -39,13 +39,13 @@ $ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/tensorflow-
 
 <p>설정 한 후</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Python 3
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Python 3
 $ sudo pip3 install --upgrade $TF_BINARY_URL
 
 </code></pre></div></div>
 
 <p>P.S  Konlpy 설치 할 때 JPype1 install 문제 해결</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip3 install JPype1
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip3 install JPype1
 </code></pre></div></div>
 :ET

@@ -1,4 +1,4 @@
-I"&<p>언제 끝날지 모르는 홈페이지 제작기 두번째이다.
+I"<p>언제 끝날지 모르는 홈페이지 제작기 두번째이다.
 문득 코드 이것저것 작업하다가 (아직 개발이라고 하기에도 뭐하기 때문에..)</p>
 
 <p>음.. 사용자들 아니 고객들이 검색하는 곳은 모바일 일 것이고 그렇다면 모바일에도 반응하는 반응형 웹으로 제작해야 하지 않을까 라는 생각이 들게 되었다.
@@ -14,7 +14,7 @@
 <p><a href="http://bootstrapk.com/examples/navbar-static-top/">BootStrap 네비게이션 바 예제</a>
 <img src="http://localhost:4000/images/cleantopia/BootStrapNavigationBar.JPG" alt="" /></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;nav class="navbar navbar-default navbar-static-top"&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;nav class="navbar navbar-default navbar-static-top"&gt;
       &lt;div class="container"&gt;
         &lt;div class="navbar-header"&gt;
           &lt;button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"&gt;

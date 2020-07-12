@@ -6,12 +6,13 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: pminsu01
+title: Erjuer01
 email: Erjuer01@gmail.com
 description: 개발과 여행 그리고 사람을 좋아하는 개발자 입니다.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://pminsu01.github.io" # the base hostname & protocol for your site
 github_username:  pminsu01
+google_analytics_id : "UA-172483160-1"
 github:
   repo: https://github.com/pminsu01
 # Build settings

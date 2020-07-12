@@ -1,13 +1,14 @@
-I"C<p>ubuntu 15.10 설치를 위하여 노트북에서 설정해야 할 것은</p>
+I"_
+<p>ubuntu 15.10 설치를 위하여 노트북에서 설정해야 할 것은</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>acpi=off or noacpi
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>acpi=off or noacpi
 </code></pre></div></div>
 
 <p>add option</p>
 
 <p>Ubuntu 첫 설치 뒤에 처리해야할 명령어</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sudo apt-get update
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sudo apt-get update
 $sudo apt-get upgrade
 $sudo apt-get autoremove
 $sudo apt-gee autoclean
@@ -18,7 +19,7 @@ $sudo apt-gee autoclean
 
 <h2 id="설치해야할-프로그램-목록">설치해야할 프로그램 목록</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- dropbox
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- dropbox
 - chrome
 - atom
 
@@ -26,13 +27,13 @@ $sudo apt-gee autoclean
 
 <h2 id="jeklly-블로그-설치">Jeklly 블로그 설치</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install jekyll
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install jekyll
 
 </code></pre></div></div>
 
 <h2 id="한국어-입력하기">한국어 입력하기</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install uim uim-byeoru
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install uim uim-byeoru
 
 </code></pre></div></div>
 
@@ -61,19 +62,19 @@ specify default im -&gt; check
 
 <p>Solution is…</p>
 
-<p>Hit <code class="language-plaintext highlighter-rouge">Ctrl + art + f1</code></p>
+<p>Hit <code class="highlighter-rouge">Ctrl + art + f1</code></p>
 
-<p>kill your current X server session by typing <code class="language-plaintext highlighter-rouge">sudo Sevice lightdm stop</code> or <code class="language-plaintext highlighter-rouge">sudo lightdm stop</code></p>
+<p>kill your current X server session by typing <code class="highlighter-rouge">sudo Sevice lightdm stop</code> or <code class="highlighter-rouge">sudo lightdm stop</code></p>
 
-<p>Enter runlevel 3 by typing <code class="language-plaintext highlighter-rouge">sudo init 3</code></p>
+<p>Enter runlevel 3 by typing <code class="highlighter-rouge">sudo init 3</code></p>
 
-<p>install <code class="language-plaintext highlighter-rouge">bash NVIDA_File*.run</code> file</p>
+<p>install <code class="highlighter-rouge">bash NVIDA_File*.run</code> file</p>
 
-<p>Check code : <code class="language-plaintext highlighter-rouge">lspci | grep -i vga</code></p>
+<p>Check code : <code class="highlighter-rouge">lspci | grep -i vga</code></p>
 
 <h2 id="명령어-위치-변경하기">명령어 위치 변경하기</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ln -s /usr/local/bin/jekyll //A    usr/bin/jekyll  //B
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ln -s /usr/local/bin/jekyll //A    usr/bin/jekyll  //B
 </code></pre></div></div>
 <p>B의 링크를 A링크로 명령어 위치 변경하기</p>
 :ET
