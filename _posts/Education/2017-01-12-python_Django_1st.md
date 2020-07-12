@@ -1,7 +1,7 @@
 ---
 category : Education
 
-title: Python Django 구축 - 01
+title: Python Django 서버 구축 - 01
 
 layout: post
 
