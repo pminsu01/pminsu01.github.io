@@ -1,6 +1,6 @@
-I"(<p>Sublime Text3 Setting</p>
+I";<p>Sublime Text3 Setting</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"font_face": "Consolas",
 	"font_size": 11,

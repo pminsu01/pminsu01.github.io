@@ -1,17 +1,12 @@
  #main-post {
 
-
         h1 {
-        font-size : $title-font-size;
-        font-style: oblique;
+          font-size : $title-font-size;
         }
 
-
         time {
-
           float: right;
-          font-size: 30px;
+          font-size: 15px;
           font-style: italic;
-
         }
 }
