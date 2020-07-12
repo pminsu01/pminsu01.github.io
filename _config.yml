@@ -10,7 +10,7 @@ title: pminsu01
 email: Erjuer01@gmail.com
 description: 개발과 여행 그리고 사람을 좋아하는 개발자 입니다.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://pminsu01.github.io/" # the base hostname & protocol for your site
+url: "http://pminsu01.github.io" # the base hostname & protocol for your site
 github_username:  pminsu01
 github:
   repo: https://github.com/pminsu01
