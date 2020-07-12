@@ -1,7 +1,8 @@
 ---
-title : 크린토피아 프로젝트 02 - Navigation 바 및 Footer 만들기
+title : 크린토피아 홍보 웹사이즈 개발 프로젝트 02
 layout: post
 category: Project
+subtitle: Navigation 바 및 Footer 만들기
 ---
 
 언제 끝날지 모르는 홈페이지 제작기 두번째이다.

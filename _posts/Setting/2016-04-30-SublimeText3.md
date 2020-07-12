@@ -1,7 +1,8 @@
 ---
-title : 서브라인 텍스트 관련
+title : SubLime Text 활용
 category : Setting
 layout : post
+subtile : Sublime 텍스트 설정 하기
 ---
 
 Sublime Text3 Setting

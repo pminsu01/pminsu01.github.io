@@ -1,5 +1,5 @@
 ---
-title: 블로그 포스트 세팅 할 것
+title: Jekyll Blog 설정
 
 layout: post
 
@@ -18,5 +18,5 @@ create table blog (
  6  days date,      // 날짜 저장
  7  constraint pk_post primary key(post_num)
  8  );
- 
+
 ```

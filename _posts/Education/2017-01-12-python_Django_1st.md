@@ -1,9 +1,11 @@
 ---
 category : Education
 
-title: Python_Django 첫번째 프로젝트 시작하기_01
+title: Python Django 구축 - 01
 
 layout: post
+
+subtitle : 가상환경(Virtualenv) 및 Django 설치 하기
 
 ---
 

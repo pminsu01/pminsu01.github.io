@@ -1,7 +1,7 @@
 ---
 category : Education
 
-title: 가상화 Python 환경 Virtualenv 설정하기
+title: 가상화 Python 환경 Virtualenv 설정
 
 layout: post
 

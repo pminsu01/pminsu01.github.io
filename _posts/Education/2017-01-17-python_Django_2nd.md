@@ -2,13 +2,15 @@
 
 category : Education
 
-title: Python_Django 첫번째 프로젝트 시작하기_02
+title: Python Django 서버 구축 - 02
 
 layout: post
 
+subtitle :  서버 설정하기
+
 ---
 
-[Python_Django 첫번째 프로젝트 시작하기_1st](https://pminsu01.github.io/2017-python_Django/ "첫번째 프로젝트")
+[Python Django 서버 구축 - 01](https://pminsu01.github.io/2017-python_Django/ "첫번째 프로젝트")
 
 에서 Django 설치까지는 완료하였다.
 

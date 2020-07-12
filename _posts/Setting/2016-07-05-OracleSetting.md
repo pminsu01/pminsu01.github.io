@@ -1,5 +1,5 @@
 ---
-title : Oracle 계정 Setting
+title : Oracle 계정 설정
 category: Setting
 layout: post
 

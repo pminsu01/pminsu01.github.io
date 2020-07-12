@@ -2,9 +2,11 @@
 
 category: Education
 
-title: Python_Django 첫번째 프로젝트 시작하기_03
+title: Python Django 서버 구축 - 03
 
 layout: post
+
+subtitle : 슈퍼 유저 생성하기 
 ---
 
 
