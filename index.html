@@ -7,7 +7,7 @@ layout: default
   <div class="post-list">
 
     {% for category in site.categories %}
-      <br/>
+      <br/> <!--여기 첫번째는 br 태그 빼는 로직 추가 할것 -->
         {% assign c = category | first %}
         {% assign posts = category | last %}
 

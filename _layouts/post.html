@@ -1,20 +1,25 @@
 ---
 layout: default
 ---
-<div class="main-post">  <!-- main post view-->
+ <!-- main post view-->
 
+<div class="post-layout-title">
 <center>
 	<h1 class="post-title">
-	{{ page.title }}
+		{{ page.title }}
 	</h1>
 
-	by Erjuer01 <br/>
-	<time class="post-date" datetime="{{ page.date | date_to_xmlschema }}"><small>{{ page.date | date: "%b %-d, %Y" }}</small></time>
-</center>
+	<h3 class="post-subtitle">
+		{{page.subtitle}}
+	</h3>
 
+	 <small>by 주에르 &middot; {{ page.date | date: "%b %-d, %Y" }}</small>
+</center>
+</div>
+
+<div class="main-post">
 <br />
 		{{ content }}
-
 </div>
 
 <!--
