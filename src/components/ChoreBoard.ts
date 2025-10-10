@@ -553,6 +553,19 @@ export class ChoreBoardComponent {
 
         console.log('[ChoreBoard] Board deleted successfully');
 
+        // 보드 목록 캐시에서 제거하여 목록 화면이 즉시 반영되도록 함
+        try {
+          const { getBoardsCache, saveBoardsCache } = await import('../utils/boardsCache');
+          const cached = getBoardsCache();
+          if (cached) {
+            const next = cached.filter(b => b.code !== board.boardCode);
+            saveBoardsCache(next);
+            console.log('[ChoreBoard] Updated boards cache after delete. Before:', cached.length, 'After:', next.length);
+          }
+        } catch (e) {
+          console.warn('[ChoreBoard] Failed to update boards cache after delete:', e);
+        }
+
         // 팝업을 먼저 닫음
         closeDialog();
 

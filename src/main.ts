@@ -200,8 +200,15 @@ async function initializeApp() {
       return;
     }
   } catch (error) {
-    // 자동 로그인 실패 시 (쿠키 없거나 만료), 특별한 처리 없이 현재 경로 렌더링
+    // 자동 로그인 실패 시 (쿠키 없거나 만료)
     console.info('[Auth] Auto-login failed. Proceeding with normal navigation.', error);
+
+    // 보호 경로(/boards, /boards/:code)에 접근 중이라면 홈으로 보냄
+    const path = window.location.pathname || '';
+    if (path === '/boards' || path === '/boards/' || path.startsWith('/boards/')) {
+      router.navigate('/', true);
+      return;
+    }
   }
 
   // 현재 경로에 맞게 라우터를 실행합니다.

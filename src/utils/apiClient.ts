@@ -34,6 +34,7 @@ class ApiClient {
     const config: RequestInit = {
       ...options,
       credentials: 'include', // HttpOnly Cookie 자동 전송
+      cache: 'no-store', // 브라우저 캐싱 방지
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,

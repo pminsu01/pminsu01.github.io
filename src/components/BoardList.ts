@@ -419,6 +419,17 @@ export class BoardList {
         });
         homeState.saveEditToken(response.boardCode, response.editToken);
 
+        // Update boards cache immediately so list reflects the new board
+        try {
+          const cached = getBoardsCache() ?? [];
+          const exists = cached.some(b => b.code === response.boardCode);
+          if (!exists) {
+            saveBoardsCache([...cached, { code: response.boardCode, title: response.title }]);
+          }
+        } catch (e) {
+          console.warn('[BoardList] Failed to update boards cache after create:', e);
+        }
+
         closePopup();
 
         // Navigate to the newly created board
@@ -529,6 +540,17 @@ export class BoardList {
           hasEdit: false,
           lastVisited: Date.now(),
         });
+
+        // Update boards cache to include the joined board
+        try {
+          const cached = getBoardsCache() ?? [];
+          const exists = cached.some(b => b.code === result.boardCode);
+          if (!exists) {
+            saveBoardsCache([...cached, { code: result.boardCode, title: result.title }]);
+          }
+        } catch (e) {
+          console.warn('[BoardList] Failed to update boards cache after join:', e);
+        }
 
         closePopup();
 
