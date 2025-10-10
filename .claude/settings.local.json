@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run type-check:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
