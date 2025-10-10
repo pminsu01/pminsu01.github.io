@@ -8,23 +8,14 @@
     // GitHub Pages SPA 라우팅 해결
     // 404 페이지에서 실제 요청된 경로를 sessionStorage에 저장하고 index.html로 리다이렉트
     (function() {
-      var pathSegmentsToKeep = 1; // GitHub Pages 레포지토리 이름이 있으면 1, 없으면 0
-
       var l = window.location;
 
-      // 현재 요청된 전체 URL을 sessionStorage에 저장
-      sessionStorage.setItem(
-        'redirect',
-        l.pathname.slice(0, 1 + l.pathname.length * pathSegmentsToKeep) +
-        (l.pathname.slice(pathSegmentsToKeep).replace(/&/g, '~and~') || '') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // 요청된 경로를 sessionStorage에 저장 (쿼리 파라미터와 해시 포함)
+      var redirect = l.pathname + l.search + l.hash;
+      sessionStorage.setItem('redirect', redirect);
 
-      // index.html로 리다이렉트 (즉시)
-      l.replace(
-        l.origin + l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/'
-      );
+      // 루트로 리다이렉트 (username.github.io 사이트는 base가 /)
+      l.replace(l.origin + '/');
     })();
   </script>
 </head>
