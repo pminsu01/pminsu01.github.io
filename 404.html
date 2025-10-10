@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script type="text/javascript">
+    // Single Page Application (SPA) 라우팅을 위한 리다이렉트 스크립트
+    // GitHub Pages는 클라이언트 사이드 라우팅 경로에 대해 404를 반환하므로,
+    // 404.html을 통해 index.html로 리다이렉트하여 SPA 라우터가 경로를 처리하도록 합니다.
+    var path = window.location.pathname;
+    var query = window.location.search;
+    var hash = window.location.hash;
+
+    // GitHub Pages의 저장소 이름이 URL에 포함될 경우를 처리합니다.
+    // 예: https://<username>.github.io/<repository-name>/path
+    // 이 프로젝트는 루트 도메인에 배포되므로, repository-name은 비어있습니다.
+    var repoName = ''; // 현재 프로젝트는 루트 도메인에 배포되므로 비워둡니다.
+
+    // URL을 재구성하여 index.html로 리다이렉트합니다.
+    // 원래의 경로와 쿼리, 해시를 index.html의 해시 부분으로 전달합니다.
+    // SPA 라우터는 이 해시를 파싱하여 올바른 뷰를 렌더링합니다.
+    window.location.replace(repoName + '/index.html' + '#' + path + query + hash);
+  </script>
+</head>
+<body>
+  <p>Redirecting to the application...</p>
+</body>
+</html>
