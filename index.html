@@ -5,6 +5,16 @@
   <link rel="icon" type="image/png" href="/CB_favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>집안일 분담 앱</title>
+  <script>
+    // GitHub Pages SPA 라우팅 복원
+    (function() {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="app"></div>
