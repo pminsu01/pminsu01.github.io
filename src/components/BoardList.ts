@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { homeState } from '../utils/homeState';
 import { escapeHtml, showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
+import { getBoardsCache, saveBoardsCache, clearBoardsCache } from '../utils/boardsCache';
 
 export class BoardList {
   private container: HTMLElement;
@@ -26,9 +27,26 @@ export class BoardList {
     this.render();
 
     try {
-      // 서버에서 직접 최신 보드 목록 가져오기 (JWT 토큰 사용)
+      // 1. 캐시 확인 (로그인 응답에서 저장된 boards)
+      const cachedBoards = getBoardsCache();
+
+      if (cachedBoards) {
+        // 캐시가 있으면 즉시 표시 (API 호출 없음)
+        console.log('[BoardList] Using cached boards');
+        this.boards = cachedBoards.map(b => ({ boardCode: b.code, title: b.title }));
+        this.loading = false;
+        this.render();
+        return;
+      }
+
+      // 2. 캐시가 없으면 API 호출 (fallback)
+      console.log('[BoardList] No cache found, fetching from API');
       const boards = await api.fetchUserBoards();
       this.boards = boards.map(b => ({ boardCode: b.boardCode, title: b.title }));
+
+      // API 응답을 캐시에 저장
+      saveBoardsCache(boards.map(b => ({ code: b.boardCode, title: b.title })));
+
       this.loading = false;
       this.render();
     } catch (err) {
@@ -100,13 +118,13 @@ export class BoardList {
       <div class="board-list">
         <div class="board-list-header">
           <div class="header-left">
-            <button class="back-button" data-action="back">←</button>
-            <h1>내 보드</h1>
+            <button class="back-button" data-action="back">◀</button>
+            <h1>내 집안일 보드</h1>
           </div>
         </div>
         <div class="empty-boards-state">
           <div class="empty-icon">📋</div>
-          <h2>집안일 보드에 오신 것을 환영합니다</h2>
+          <h2>집안일 분담 서비스에 오신 것을 환영합니다</h2>
           <p class="empty-description">새로운 보드를 만들거나 기존 보드에 합류하세요</p>
           <div class="empty-actions">
             <button class="btn-primary" data-action="create">➕ 새 보드 만들기</button>
@@ -241,6 +259,10 @@ export class BoardList {
   private async handleLogout(): Promise<void> {
     try {
       await api.logout();
+
+      // 로그아웃 시 boards 캐시 삭제
+      clearBoardsCache();
+
       const { clearAuth } = await import('../utils/cookies');
       clearAuth();
       navigateTo('/');

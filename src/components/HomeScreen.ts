@@ -36,7 +36,7 @@ export class HomeScreen {
       <div class="home-screen empty">
         <div class="empty-state">
           <div class="empty-icon">📋</div>
-          <h1>집안일 보드에 오신 것을 환영합니다</h1>
+          <h1>집안일 분담 서비스에 오신 것을 환영합니다</h1>
           <p>새로운 보드를 만들거나 기존 보드에 합류하세요</p>
           <div class="cta-buttons">
             <button class="btn-primary" data-action="create">

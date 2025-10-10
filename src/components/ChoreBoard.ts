@@ -392,7 +392,7 @@ export class ChoreBoardComponent {
         <input
           type="text"
           class="title-input"
-          placeholder="새 할일 추가"
+          placeholder="새 집안일 추가"
           id="new-item-title"
         />
         <select class="assignee-select" id="new-item-assignee">

@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { isNetworkError } from '../utils/errors';
+import { saveBoardsCache } from '../utils/boardsCache';
 
 export class ParticipantLogin {
   private container: HTMLElement;
@@ -93,10 +94,15 @@ export class ParticipantLogin {
     try {
       // Login via new auth API
       // HttpOnly Cookie 방식: 백엔드가 자동으로 쿠키 설정
-      await api.login(userId);
+      const response = await api.login(userId);
+
+      // 로그인 응답에 포함된 boards를 캐시에 저장
+      // 이렇게 하면 BoardList에서 불필요한 API 호출을 줄일 수 있음
+      if (response.boards && Array.isArray(response.boards.boards)) {
+        saveBoardsCache(response.boards.boards);
+      }
 
       // 토큰과 사용자 정보는 모두 서버에서 관리 (HttpOnly Cookie)
-      // localStorage에 저장하지 않음
 
       // Navigate to board list
       navigateTo('/boards');
