@@ -33,8 +33,8 @@ export class NetworkError extends Error {
     this.retryable = retryable;
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NetworkError);
+    if ((Error as any).captureStackTrace) {
+      (Error as any).captureStackTrace(this, NetworkError);
     }
   }
 
