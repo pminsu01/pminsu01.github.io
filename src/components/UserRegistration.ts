@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { showErrorPopup, showToast } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { isNetworkError } from '../utils/errors';
+import { saveToken } from '../utils/auth';
 
 const PRESET_COLORS = [
   { name: '레드', hex: '#ef4444' },
@@ -183,11 +184,16 @@ export class UserRegistration {
 
     try {
       // Register user
-      // HttpOnly Cookie 방식: 백엔드가 자동으로 쿠키 설정
-      await api.registerUser(userId, nickname, this.selectedColor);
+      // localStorage 방식: 응답에서 토큰을 받아 localStorage에 저장
+      const response = await api.registerUser(userId, nickname, this.selectedColor);
 
-      // 토큰과 사용자 정보는 모두 서버에서 관리 (HttpOnly Cookie)
-      // localStorage에 저장하지 않음
+      // JWT 토큰 저장
+      if (response.token) {
+        saveToken(response.token);
+        console.log('[UserRegistration] Token saved to localStorage');
+      } else {
+        console.error('[UserRegistration] No token in register response');
+      }
 
       showToast('등록 완료! 보드 목록으로 이동합니다...', 'success');
 

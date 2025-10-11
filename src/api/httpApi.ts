@@ -229,18 +229,18 @@ class HttpAPI {
   }
 
   /**
-   * Login: returns user and boards
-   * HttpOnly Cookie 방식: 토큰은 백엔드가 쿠키로 설정하므로 응답에 포함되지 않음
+   * Login: returns token, user and boards
+   * localStorage 방식: 응답에서 토큰을 받아 localStorage에 저장
    */
   async login(
     userId: string
-  ): Promise<{ user: any; boards: { boards: Array<{ code: string; title: string }> } }> {
+  ): Promise<{ token: string; user: any; boards: { boards: Array<{ code: string; title: string }> } }> {
     return apiClient.post('/auth/login', { userId });
   }
 
   /**
-   * Logout: HttpOnly Cookie 삭제
-   * 백엔드가 쿠키를 삭제하고 프론트엔드는 user 정보만 삭제
+   * Logout: localStorage에서 토큰 삭제
+   * 서버에도 로그아웃 요청 전송 (선택사항)
    */
   async logout(): Promise<void> {
     await apiClient.post('/auth/logout');

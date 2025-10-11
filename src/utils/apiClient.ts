@@ -1,12 +1,12 @@
-import { clearAuth } from './cookies';
+import { clearAuth, getAuthHeader } from './auth';
 import { navigateTo } from './navigation';
 import { showToast, showNetworkErrorPopup } from './domHelpers';
 import { NetworkError, NetworkErrorType, createNetworkErrorFromFetch } from './errors';
 
 /**
  * Fetch API 기반 HTTP 클라이언트
- * - HttpOnly Cookie를 통한 JWT 토큰 자동 전송
- * - 401 에러 자동 처리
+ * - Authorization Bearer 토큰 자동 전송 (localStorage)
+ * - 401/403 에러 자동 처리
  * - JSON 자동 변환
  * - 타입 안전성
  */
@@ -19,8 +19,8 @@ class ApiClient {
 
   /**
    * 공통 요청 메서드
-   * - HttpOnly Cookie 자동 전송 (credentials: 'include')
-   * - 401 에러 자동 처리 (재로그인 유도)
+   * - Authorization Bearer 토큰 자동 전송
+   * - 401/403 에러 자동 처리 (재로그인 유도)
    * - JSON 자동 파싱
    */
   private async request<T = any>(
@@ -30,13 +30,16 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
+    // Authorization 헤더 자동 추가
+    const authHeader = getAuthHeader();
+
     // 요청 설정
     const config: RequestInit = {
       ...options,
-      credentials: 'include', // HttpOnly Cookie 자동 전송
       cache: 'no-store', // 브라우저 캐싱 방지
       headers: {
         'Content-Type': 'application/json',
+        ...authHeader, // Authorization: Bearer {token}
         ...options.headers,
       },
     };
@@ -44,8 +47,9 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
-      // 401 Unauthorized - 토큰 만료 또는 무효
-      if (response.status === 401) {
+      // 401 Unauthorized 또는 403 Forbidden - 토큰 만료 또는 무효
+      // Safari ITP로 인해 쿠키가 전송되지 않을 경우 403 발생 가능
+      if (response.status === 401 || response.status === 403) {
         if (!suppressAuthRedirect) {
           this.handleUnauthorized();
         }

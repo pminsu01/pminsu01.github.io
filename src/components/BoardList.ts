@@ -263,7 +263,7 @@ export class BoardList {
       // 로그아웃 시 boards 캐시 삭제
       clearBoardsCache();
 
-      const { clearAuth } = await import('../utils/cookies');
+      const { clearAuth } = await import('../utils/auth');
       clearAuth();
       navigateTo('/');
     } catch (error) {

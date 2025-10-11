@@ -3,6 +3,7 @@ import { showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { isNetworkError } from '../utils/errors';
 import { saveBoardsCache } from '../utils/boardsCache';
+import { saveToken } from '../utils/auth';
 
 export class ParticipantLogin {
   private container: HTMLElement;
@@ -93,16 +94,22 @@ export class ParticipantLogin {
 
     try {
       // Login via new auth API
-      // HttpOnly Cookie 방식: 백엔드가 자동으로 쿠키 설정
+      // localStorage 방식: 응답에서 토큰을 받아 localStorage에 저장
       const response = await api.login(userId);
+
+      // JWT 토큰 저장
+      if (response.token) {
+        saveToken(response.token);
+        console.log('[ParticipantLogin] Token saved to localStorage');
+      } else {
+        console.error('[ParticipantLogin] No token in login response');
+      }
 
       // 로그인 응답에 포함된 boards를 캐시에 저장
       // 이렇게 하면 BoardList에서 불필요한 API 호출을 줄일 수 있음
       if (response.boards && Array.isArray(response.boards.boards)) {
         saveBoardsCache(response.boards.boards);
       }
-
-      // 토큰과 사용자 정보는 모두 서버에서 관리 (HttpOnly Cookie)
 
       // Navigate to board list
       navigateTo('/boards');
