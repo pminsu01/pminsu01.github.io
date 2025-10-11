@@ -522,32 +522,39 @@ export class ChoreBoardComponent {
     const cancelBtn = dialog.querySelector('.delete-cancel') as HTMLButtonElement;
     const confirmBtn = dialog.querySelector('.delete-confirm') as HTMLButtonElement;
 
+    let isClosing = false; // 중복 닫기 방지 플래그
+
     // Escape key handler
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         closeDialog();
       }
     };
-    document.addEventListener('keydown', handleEscape);
 
-    const closeDialog = () => {
-      // 항상 이벤트 리스너 제거
-      document.removeEventListener('keydown', handleEscape);
-      overlay.remove();
-    };
-
-    // Cancel button - just close dialog
-    cancelBtn.addEventListener('click', closeDialog);
-
-    // Overlay click - close dialog
-    overlay.addEventListener('click', (e) => {
+    // Overlay click handler
+    const handleOverlayClick = (e: Event) => {
       if (e.target === overlay) {
+        e.preventDefault();
+        e.stopPropagation();
         closeDialog();
       }
-    });
+    };
 
-    // Confirm button - delete board
-    confirmBtn.addEventListener('click', async () => {
+    // Cancel button handler
+    const handleCancel = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDialog();
+    };
+
+    // Confirm button handler
+    const handleConfirm = async (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (confirmBtn.disabled) return; // 중복 클릭 방지
+
       confirmBtn.disabled = true;
       confirmBtn.textContent = '삭제 중...';
 
@@ -585,7 +592,26 @@ export class ChoreBoardComponent {
         const errorMessage = error instanceof Error ? error.message : '보드 삭제에 실패했습니다';
         alert(`보드 삭제 실패: ${errorMessage}`);
       }
-    });
+    };
+
+    const closeDialog = () => {
+      if (isClosing) return; // 이미 닫히는 중이면 무시
+      isClosing = true;
+
+      // 모든 이벤트 리스너 제거
+      document.removeEventListener('keydown', handleEscape);
+      overlay.removeEventListener('click', handleOverlayClick);
+      cancelBtn.removeEventListener('click', handleCancel);
+      confirmBtn.removeEventListener('click', handleConfirm);
+
+      overlay.remove();
+    };
+
+    // 이벤트 리스너 등록
+    document.addEventListener('keydown', handleEscape);
+    overlay.addEventListener('click', handleOverlayClick);
+    cancelBtn.addEventListener('click', handleCancel);
+    confirmBtn.addEventListener('click', handleConfirm);
 
     // Show dialog with animation
     setTimeout(() => {
