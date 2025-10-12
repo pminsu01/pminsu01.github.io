@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  # main 브랜치에 푸시될 때마다 실행됩니다.
+  # dev 또는 main 브랜치에 푸시될 때마다 실행됩니다.
   push:
     branches:
+      - dev
       - main
 
 # 동시에 하나의 배포만 실행되도록 설정합니다.
@@ -32,8 +33,20 @@ jobs:
       - name: Install dependencies
         run: npm install --verbose
 
+      - name: Set API URL based on branch
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            echo "VITE_API_BASE_URL=https://starlight-8.asuscomm.com:8108/api" >> $GITHUB_ENV
+            echo "📍 Building for DEV branch → starlight-8.asuscomm.com"
+          else
+            echo "VITE_API_BASE_URL=https://chores-board-be-dns.koreacentral.cloudapp.azure.com:8108/api" >> $GITHUB_ENV
+            echo "📍 Building for MAIN branch → azure.com"
+          fi
+
       - name: Build
         run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ env.VITE_API_BASE_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

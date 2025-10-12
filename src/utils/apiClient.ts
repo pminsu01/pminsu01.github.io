@@ -13,8 +13,18 @@ import { NetworkError, NetworkErrorType, createNetworkErrorFromFetch } from './e
 class ApiClient {
   private baseURL: string;
 
-  constructor(baseURL: string = 'https://starlight-8.asuscomm.com:5643/api') {
-    this.baseURL = baseURL;
+  constructor(baseURL?: string) {
+    // 환경별 baseURL 설정
+    // - 환경 변수 우선: GitHub Actions에서 설정된 VITE_API_BASE_URL 사용
+    // - 로컬 개발: HTTP (SSL 인증서 문제 회피)
+    // - 프로덕션 기본값: starlight-8 도메인 (유효한 SSL 인증서)
+    const defaultBaseURL =
+      import.meta.env.VITE_API_BASE_URL ||
+      (import.meta.env.MODE === 'production'
+        ? 'https://starlight-8.asuscomm.com:8108/api'
+        : 'http://chores-board-be-dns.koreacentral.cloudapp.azure.com:8108/api');
+
+    this.baseURL = baseURL ?? defaultBaseURL;
   }
 
   /**

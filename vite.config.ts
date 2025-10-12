@@ -9,10 +9,9 @@ export default defineConfig({
     outDir: 'dist',
   },
 
-  // HTTPS 개발 서버 설정
-  // 서버가 HTTPS이므로 클라이언트도 HTTPS로 실행해야 Secure 쿠키가 전달됨
+  // 개발 서버 설정
   server: {
-    https: true, // Vite 내장 self-signed certificate 사용
+    https: false, // 로컬 HTTP 개발
     port: 5173,
   },
 });
