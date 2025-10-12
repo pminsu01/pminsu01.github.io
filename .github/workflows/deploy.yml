@@ -23,17 +23,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    permissions:
-      pages: write
-      id-token: write
+  # 브랜치 결정 Job
+  determine-environment:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      branch: ${{ steps.set-branch.outputs.branch }}
     steps:
-      - name: Determine branch to deploy
-        id: branch
+      - name: Determine branch and environment
+        id: set-branch
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             DEPLOY_BRANCH="${{ github.event.inputs.branch }}"
@@ -43,29 +41,39 @@ jobs:
             echo "🚀 Auto deployment - Branch: main"
           fi
           echo "branch=$DEPLOY_BRANCH" >> $GITHUB_OUTPUT
-          echo "📍 Deploying from branch: $DEPLOY_BRANCH"
 
+      - name: Set environment name
+        id: set-env
+        run: |
+          BRANCH="${{ steps.set-branch.outputs.branch }}"
+          echo "environment=$BRANCH" >> $GITHUB_OUTPUT
+          echo "📍 Using environment: $BRANCH"
+
+  # 실제 배포 Job
+  deploy:
+    needs: determine-environment
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.determine-environment.outputs.environment }}
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Checkout selected branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.branch.outputs.branch }}
+          ref: ${{ needs.determine-environment.outputs.branch }}
+
+      - name: Display environment info
+        run: |
+          echo "🎯 Deploying from branch: ${{ needs.determine-environment.outputs.branch }}"
+          echo "📍 Using API Endpoint: ${{ vars.API_ENDPOINT }}"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Set environment variables based on branch
-        id: env
-        run: |
-          BRANCH="${{ steps.branch.outputs.branch }}"
-          if [ "$BRANCH" == "dev" ]; then
-            echo "API_URL=${{ vars.DEV_API_ENDPOINT }}" >> $GITHUB_OUTPUT
-            echo "📍 Using DEV API: ${{ vars.DEV_API_ENDPOINT }}"
-          else
-            echo "API_URL=${{ vars.MAIN_API_ENDPOINT }}" >> $GITHUB_OUTPUT
-            echo "📍 Using MAIN API: ${{ vars.MAIN_API_ENDPOINT }}"
-          fi
 
       - name: Install dependencies
         run: npm install --verbose
@@ -73,7 +81,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ steps.env.outputs.API_URL }}
+          VITE_API_BASE_URL: ${{ vars.API_ENDPOINT }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
