@@ -1,11 +1,21 @@
 name: Deploy to GitHub Pages
 
 on:
-  # dev 또는 main 브랜치에 푸시될 때마다 실행됩니다.
+  # main 브랜치에 푸시될 때 자동 배포
   push:
     branches:
-      - dev
       - main
+
+  # GitHub UI에서 수동으로 배포 트리거 (환경 선택 가능)
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '배포 환경 선택'
+        required: true
+        type: choice
+        options:
+          - dev (starlight-8)
+          - main (azure)
 
 # 동시에 하나의 배포만 실행되도록 설정합니다.
 concurrency:
@@ -18,8 +28,9 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
+    # GitHub Environment 동적 설정
     environment:
-      name: github-pages
+      name: ${{ github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.environment, 'dev') && 'dev' || 'main') || 'main' }}
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
@@ -33,20 +44,15 @@ jobs:
       - name: Install dependencies
         run: npm install --verbose
 
-      - name: Set API URL based on branch
+      - name: Display selected environment
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-            echo "VITE_API_BASE_URL=https://starlight-8.asuscomm.com:8108/api" >> $GITHUB_ENV
-            echo "📍 Building for DEV branch → starlight-8.asuscomm.com"
-          else
-            echo "VITE_API_BASE_URL=https://chores-board-be-dns.koreacentral.cloudapp.azure.com:8108/api" >> $GITHUB_ENV
-            echo "📍 Building for MAIN branch → azure.com"
-          fi
+          echo "🎯 Deployment Environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'main (auto)' }}"
+          echo "📍 API Endpoint: ${{ vars.API_ENDPOINT }}"
 
       - name: Build
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ env.VITE_API_BASE_URL }}
+          VITE_API_BASE_URL: ${{ vars.API_ENDPOINT }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
