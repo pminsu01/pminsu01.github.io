@@ -189,21 +189,29 @@ async function initializeApp() {
 
   const router = new Router(appContainer);
 
-  // Auto-login check
-  try {
-    // 쿠키가 있으면, 서버에 유효한지 확인
-    await api.checkLoginStatus();
+  // Auto-login check - only if token exists
+  const token = localStorage.getItem('choresboard_jwt_token');
+  if (token) {
+    try {
+      // 토큰이 있으면, 서버에 유효한지 확인
+      await api.checkLoginStatus();
 
-    // 사용자가 로그인했고 루트 경로에 있다면 /boards로 리디렉션합니다.
-    if (window.location.pathname === '/' || window.location.pathname === '') {
-      router.navigate('/boards', true);
-      return;
+      // 사용자가 로그인했고 루트 경로에 있다면 /boards로 리디렉션합니다.
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        router.navigate('/boards', true);
+        return;
+      }
+    } catch (error) {
+      // 자동 로그인 실패 시 (토큰 만료 등)
+      // 보호 경로(/boards, /boards/:code)에 접근 중이라면 홈으로 보냄
+      const path = window.location.pathname || '';
+      if (path === '/boards' || path === '/boards/' || path.startsWith('/boards/')) {
+        router.navigate('/', true);
+        return;
+      }
     }
-  } catch (error) {
-    // 자동 로그인 실패 시 (쿠키 없거나 만료)
-    console.info('[Auth] Auto-login failed. Proceeding with normal navigation.', error);
-
-    // 보호 경로(/boards, /boards/:code)에 접근 중이라면 홈으로 보냄
+  } else {
+    // 토큰이 없는 경우: 보호 경로 접근 시 홈으로 리디렉션
     const path = window.location.pathname || '';
     if (path === '/boards' || path === '/boards/' || path.startsWith('/boards/')) {
       router.navigate('/', true);

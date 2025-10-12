@@ -210,7 +210,6 @@ export class HomeScreen {
       this.setOperationState({ status: 'success' });
       navigateTo(`/boards/${response.boardCode}`);
     } catch (error) {
-      console.error('[HomeScreen] Create failed:', error);
       this.setOperationState({
         status: 'error',
         error: error instanceof Error ? error.message : '보드 생성 실패',
@@ -237,7 +236,6 @@ export class HomeScreen {
       this.setOperationState({ status: 'success' });
       navigateTo(`/boards/${code}`);
     } catch (error) {
-      console.error('[HomeScreen] Join failed:', error);
       this.setOperationState({
         status: 'error',
         error: error instanceof Error ? error.message : '보드 합류 실패',

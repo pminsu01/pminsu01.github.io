@@ -32,7 +32,6 @@ export class BoardList {
 
       if (cachedBoards) {
         // 캐시가 있으면 즉시 표시 (API 호출 없음)
-        console.log('[BoardList] Using cached boards');
         this.boards = cachedBoards.map(b => ({ boardCode: b.code, title: b.title }));
         this.loading = false;
         this.render();
@@ -40,7 +39,6 @@ export class BoardList {
       }
 
       // 2. 캐시가 없으면 API 호출 (fallback)
-      console.log('[BoardList] No cache found, fetching from API');
       const boards = await api.fetchUserBoards();
       this.boards = boards.map(b => ({ boardCode: b.boardCode, title: b.title }));
 
@@ -50,7 +48,6 @@ export class BoardList {
       this.loading = false;
       this.render();
     } catch (err) {
-      console.error('[BoardList] Failed to load boards:', err);
       const errorMessage = err instanceof Error ? err.message : '보드를 불러올 수 없습니다';
       this.error = errorMessage;
       this.loading = false;
@@ -267,7 +264,6 @@ export class BoardList {
       clearAuth();
       navigateTo('/');
     } catch (error) {
-      console.error('[BoardList] Logout failed:', error);
       showErrorPopup('로그아웃에 실패했습니다');
       throw error;
     }
@@ -331,7 +327,6 @@ export class BoardList {
       const { showToast } = await import('../utils/domHelpers');
       showToast(`코드:${text} 복사 되었습니다.`, 'success');
     } catch (err) {
-      console.error('[BoardList] Failed to copy:', err);
       showErrorPopup('클립보드 복사에 실패했습니다.');
     }
   }
@@ -427,7 +422,7 @@ export class BoardList {
             saveBoardsCache([...cached, { code: response.boardCode, title: response.title }]);
           }
         } catch (e) {
-          console.warn('[BoardList] Failed to update boards cache after create:', e);
+          // Cache update failed, ignore
         }
 
         closePopup();
@@ -435,7 +430,6 @@ export class BoardList {
         // Navigate to the newly created board
         navigateTo(`/boards/${response.boardCode}`);
       } catch (error) {
-        console.error('[BoardList] Failed to create board:', error);
 
         createBtn.disabled = false;
         createBtn.textContent = '생성';
@@ -549,7 +543,7 @@ export class BoardList {
             saveBoardsCache([...cached, { code: result.boardCode, title: result.title }]);
           }
         } catch (e) {
-          console.warn('[BoardList] Failed to update boards cache after join:', e);
+          // Cache update failed, ignore
         }
 
         closePopup();
@@ -557,7 +551,6 @@ export class BoardList {
         // Navigate to the joined board
         navigateTo(`/boards/${result.boardCode}`);
       } catch (error) {
-        console.error('[BoardList] Failed to join board:', error);
 
         joinBtn.disabled = false;
         joinBtn.textContent = '합류하기';

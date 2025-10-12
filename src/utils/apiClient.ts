@@ -19,7 +19,7 @@ class ApiClient {
     // - 로컬 개발 폴백: HTTP (SSL 인증서 문제 회피)
     const defaultBaseURL =
       import.meta.env.VITE_API_BASE_URL ||
-      'http://chores-board-be-dns.koreacentral.cloudapp.azure.com:8108/api';
+      'https://chores-board-be-dns.koreacentral.cloudapp.azure.com/api';
 
     this.baseURL = baseURL ?? defaultBaseURL;
   }
@@ -71,7 +71,7 @@ class ApiClient {
           404,
           true
         );
-        this.handleNetworkError(networkError, endpoint);
+        this.handleNetworkError(networkError);
         throw networkError;
       }
 
@@ -108,7 +108,7 @@ class ApiClient {
       // TypeError: Failed to fetch - 네트워크 연결 실패
       if (error instanceof TypeError) {
         const networkError = createNetworkErrorFromFetch(error);
-        this.handleNetworkError(networkError, endpoint);
+        this.handleNetworkError(networkError);
         throw networkError;
       }
 
@@ -144,7 +144,6 @@ class ApiClient {
    * - 로그인 페이지로 리다이렉트
    */
   private handleUnauthorized(): void {
-    console.warn('[ApiClient] 401 Unauthorized - clearing auth and redirecting to login');
     clearAuth();
     showToast('세션이 만료되었습니다. 다시 로그인해주세요.', 'error');
     navigateTo('/');
@@ -155,14 +154,7 @@ class ApiClient {
    * - 네트워크 에러 팝업 표시
    * - 재시도 옵션 제공
    */
-  private handleNetworkError(error: NetworkError, endpoint: string): void {
-    console.error('[ApiClient] Network error:', {
-      type: error.type,
-      endpoint,
-      message: error.message,
-      statusCode: error.statusCode,
-    });
-
+  private handleNetworkError(error: NetworkError): void {
     // 404나 네트워크 연결 실패 시 팝업 표시
     if (error.shouldShowNetworkPopup()) {
       showNetworkErrorPopup(error.getUserMessage());

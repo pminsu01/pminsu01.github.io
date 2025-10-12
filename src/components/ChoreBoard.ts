@@ -10,7 +10,6 @@ export class ChoreBoardComponent {
   private draggingId: string | null = null;
 
   constructor(container: HTMLElement) {
-    console.log('[ChoreBoard] Constructor called');
     this.container = container;
     this.setupEventDelegation();
     this.render();
@@ -19,12 +18,9 @@ export class ChoreBoardComponent {
 
   private setupEventDelegation(): void {
     if (this.eventListenersAttached) {
-      console.log('[ChoreBoard] Event listeners already attached, skipping');
       return;
     }
     this.eventListenersAttached = true;
-
-    console.log('[ChoreBoard] Setting up event delegation');
     // Use event delegation on container
     this.container.addEventListener('click', this.handleClick.bind(this));
     this.container.addEventListener('change', this.handleChange.bind(this));
@@ -36,7 +32,6 @@ export class ChoreBoardComponent {
     this.container.addEventListener('dragend', this.handleDragEnd.bind(this));
 
     this.container.addEventListener('submit', (e) => {
-      console.log('[ChoreBoard] Submit event detected - preventing');
       e.preventDefault();
     });
   }
@@ -62,7 +57,6 @@ export class ChoreBoardComponent {
     if (target.id === 'add-item-btn' || target.closest('#add-item-btn')) {
       e.preventDefault();
       e.stopPropagation();
-      console.log('[ChoreBoard] Add button clicked');
       await this.addItem();
       return;
     }
@@ -187,14 +181,12 @@ export class ChoreBoardComponent {
     if (target.id === 'new-item-title' && e.key === 'Enter') {
       e.preventDefault();
       e.stopPropagation();
-      console.log('[ChoreBoard] Enter key pressed');
       await this.addItem();
     }
   }
 
   private async addItem(): Promise<void> {
     if (this.isAdding) {
-      console.log('[ChoreBoard] Already adding, skipping');
       return;
     }
 
@@ -204,7 +196,6 @@ export class ChoreBoardComponent {
     const title = titleInput?.value.trim();
     if (!title) return;
 
-    console.log('[ChoreBoard] Adding item:', title);
     this.isAdding = true;
 
     // Get values before clearing
@@ -218,7 +209,6 @@ export class ChoreBoardComponent {
       await state.addItem(title, assigneeId);
     } finally {
       this.isAdding = false;
-      console.log('[ChoreBoard] Add complete');
     }
   }
 
@@ -291,7 +281,6 @@ export class ChoreBoardComponent {
   }
 
   private render(): void {
-    console.log('[ChoreBoard] Rendering...');
     const board = state.getBoard();
     if (!board) {
       this.container.innerHTML = '<div class="loading">Loading...</div>';
@@ -301,7 +290,6 @@ export class ChoreBoardComponent {
     const uiState = state.getUIState();
     const incompleteItems = state.getIncompleteItems();
     const completedItems = state.getCompletedItems();
-    console.log('[ChoreBoard] Items count - incomplete:', incompleteItems.length, 'completed:', completedItems.length);
 
     this.container.innerHTML = `
       <div class="chore-board">
@@ -316,7 +304,6 @@ export class ChoreBoardComponent {
 
   private renderHeader(title: string, editable: boolean, creatorName: string, isRemove?: boolean, createdAt?: Date): string {
     const formattedDate = createdAt ? this.formatCreatedAt(createdAt) : '';
-    console.log('[ChoreBoard] renderHeader - editable:', editable, 'isRemove:', isRemove);
     return `
       <div class="board-header">
         <div class="header-top">
@@ -482,11 +469,8 @@ export class ChoreBoardComponent {
     const board = state.getBoard();
     if (!board) return;
 
-    console.log('[ChoreBoard] handleDeleteBoard - board:', board.boardCode, 'isRemove:', board.isRemove);
-
     // isRemove가 true일 때만 삭제 가능 (서버에서 권한 확인)
     if (!board.isRemove) {
-      console.log('[ChoreBoard] Delete not allowed - isRemove is false');
       return;
     }
 
@@ -564,8 +548,6 @@ export class ChoreBoardComponent {
         const { api } = await import('../api/httpApi');
         await api.deleteBoard(board.boardCode);
 
-        console.log('[ChoreBoard] Board deleted successfully');
-
         // 보드 목록 캐시에서 제거하여 목록 화면이 즉시 반영되도록 함
         try {
           const { getBoardsCache, saveBoardsCache } = await import('../utils/boardsCache');
@@ -573,10 +555,9 @@ export class ChoreBoardComponent {
           if (cached) {
             const next = cached.filter(b => b.code !== board.boardCode);
             saveBoardsCache(next);
-            console.log('[ChoreBoard] Updated boards cache after delete. Before:', cached.length, 'After:', next.length);
           }
         } catch (e) {
-          console.warn('[ChoreBoard] Failed to update boards cache after delete:', e);
+          // Cache update failed, ignore
         }
 
         // 팝업을 먼저 닫음
@@ -586,7 +567,6 @@ export class ChoreBoardComponent {
         await new Promise(resolve => setTimeout(resolve, 150));
         navigateTo('/boards');
       } catch (error) {
-        console.error('[ChoreBoard] Failed to delete board:', error);
         confirmBtn.disabled = false;
         confirmBtn.textContent = '확인';
         closeDialog();

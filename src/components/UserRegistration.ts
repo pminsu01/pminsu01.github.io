@@ -190,7 +190,6 @@ export class UserRegistration {
       // JWT 토큰 저장
       if (response.token) {
         saveToken(response.token);
-        console.log('[UserRegistration] Token saved to localStorage');
       } else {
         console.error('[UserRegistration] No token in register response');
       }
@@ -198,7 +197,6 @@ export class UserRegistration {
       // 🔒 보안: 회원가입 시 이전 사용자 캐시 초기화 (필수)
       const { clearBoardsCache } = await import('../utils/boardsCache');
       clearBoardsCache();
-      console.log('[UserRegistration] Cleared previous user cache');
 
       showToast('등록 완료! 보드 목록으로 이동합니다...', 'success');
 
@@ -207,7 +205,6 @@ export class UserRegistration {
         navigateTo('/boards');
       }, 500);
     } catch (error) {
-      console.error('[UserRegistration] Failed to register:', error);
       const errorMessage = error instanceof Error ? error.message : '등록에 실패했습니다';
 
       registerBtn.disabled = false;

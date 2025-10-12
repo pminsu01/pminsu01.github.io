@@ -13,7 +13,6 @@ const TOKEN_KEY = 'choresboard_jwt_token';
 export function saveToken(token: string): void {
   try {
     localStorage.setItem(TOKEN_KEY, token);
-    console.log('[Auth] Token saved to localStorage');
   } catch (error) {
     console.error('[Auth] Failed to save token:', error);
   }
@@ -24,8 +23,7 @@ export function saveToken(token: string): void {
  */
 export function getToken(): string | null {
   try {
-    const token = localStorage.getItem(TOKEN_KEY);
-    return token;
+    return localStorage.getItem(TOKEN_KEY);
   } catch (error) {
     console.error('[Auth] Failed to get token:', error);
     return null;
@@ -38,7 +36,6 @@ export function getToken(): string | null {
 export function clearToken(): void {
   try {
     localStorage.removeItem(TOKEN_KEY);
-    console.log('[Auth] Token cleared from localStorage');
   } catch (error) {
     console.error('[Auth] Failed to clear token:', error);
   }
@@ -72,5 +69,4 @@ export function clearAuth(): void {
   clearToken();
   // sessionStorage도 정리
   sessionStorage.clear();
-  console.log('[Auth] All authentication data cleared');
 }

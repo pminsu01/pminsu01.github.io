@@ -100,7 +100,6 @@ export class ParticipantLogin {
       // JWT 토큰 저장
       if (response.token) {
         saveToken(response.token);
-        console.log('[ParticipantLogin] Token saved to localStorage');
       } else {
         console.error('[ParticipantLogin] No token in login response');
       }
@@ -108,7 +107,6 @@ export class ParticipantLogin {
       // 🔒 보안: 로그인 시 이전 사용자 캐시 초기화 (필수)
       const { clearBoardsCache } = await import('../utils/boardsCache');
       clearBoardsCache();
-      console.log('[ParticipantLogin] Cleared previous user cache');
 
       // 로그인 응답에 포함된 boards를 캐시에 저장
       // 이렇게 하면 BoardList에서 불필요한 API 호출을 줄일 수 있음
@@ -119,8 +117,6 @@ export class ParticipantLogin {
       // Navigate to board list
       navigateTo('/boards');
     } catch (error) {
-      console.error('[ParticipantLogin] Login failed:', error);
-
       // Re-enable button
       loginBtn.disabled = false;
       loginBtn.classList.remove('loading');
