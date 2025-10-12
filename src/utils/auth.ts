@@ -63,9 +63,35 @@ export function getAuthHeader(): Record<string, string> | undefined {
 }
 
 /**
+ * JWT 토큰에서 userId 추출
+ * JWT payload의 sub 필드를 userId로 사용
+ */
+export function getUserIdFromToken(): string | null {
+  try {
+    const token = getToken();
+    if (!token) return null;
+
+    // JWT는 header.payload.signature 형식
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+
+    // payload를 base64 디코딩
+    const payload = parts[1];
+    const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const data = JSON.parse(decoded);
+
+    // sub 필드가 userId
+    return data.sub || data.userId || null;
+  } catch (error) {
+    console.error('[Auth] Failed to extract userId from token:', error);
+    return null;
+  }
+}
+
+/**
  * 모든 인증 정보 삭제 (로그아웃)
  */
-export function clearAuth(): void {
+export async function clearAuth(): Promise<void> {
   clearToken();
   // sessionStorage도 정리
   sessionStorage.clear();

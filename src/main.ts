@@ -166,7 +166,7 @@ class Router {
           <div class="error-screen">
             <h2>⚠️ 보드를 불러올 수 없습니다</h2>
             <p>${error instanceof Error ? error.message : '알 수 없는 오류'}</p>
-            <button onclick="window.dispatchEvent(new CustomEvent('navigate', { detail: { path: '/' } }))">홈으로 돌아가기</button>
+            <button onclick="window.dispatchEvent(new CustomEvent('navigate', { detail: { path: '/boards' } }))">보드 리스트로 돌아가기</button>
           </div>
         `;
       }

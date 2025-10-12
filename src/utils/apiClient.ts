@@ -19,7 +19,7 @@ class ApiClient {
     // - 로컬 개발 폴백: HTTP (SSL 인증서 문제 회피)
     const defaultBaseURL =
       import.meta.env.VITE_API_BASE_URL ||
-      'https://chores-board-be-dns.koreacentral.cloudapp.azure.com/api';
+      'http://localhost:8108/api';
 
     this.baseURL = baseURL ?? defaultBaseURL;
   }
@@ -58,7 +58,7 @@ class ApiClient {
       // Safari ITP로 인해 쿠키가 전송되지 않을 경우 403 발생 가능
       if (response.status === 401 || response.status === 403) {
         if (!suppressAuthRedirect) {
-          this.handleUnauthorized();
+          await this.handleUnauthorized();
         }
         throw new Error('Unauthorized - session expired or invalid');
       }
@@ -143,8 +143,8 @@ class ApiClient {
    * - 토스트 메시지 표시
    * - 로그인 페이지로 리다이렉트
    */
-  private handleUnauthorized(): void {
-    clearAuth();
+  private async handleUnauthorized(): Promise<void> {
+    await clearAuth();
     showToast('세션이 만료되었습니다. 다시 로그인해주세요.', 'error');
     navigateTo('/');
   }

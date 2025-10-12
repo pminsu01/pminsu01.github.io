@@ -458,7 +458,7 @@ export class ChoreBoardComponent {
     try {
       await navigator.clipboard.writeText(board.boardCode);
       const { showToast } = await import('../utils/domHelpers');
-      showToast(`코드:${board.boardCode} 복사 되었습니다.`, 'success');
+      showToast(`코드: ${board.boardCode} 복사 되었습니다.`, 'success');
     } catch (err) {
       console.error('[ChoreBoard] Failed to copy board code:', err);
       alert('클립보드 복사에 실패했습니다.');
@@ -548,17 +548,6 @@ export class ChoreBoardComponent {
         const { api } = await import('../api/httpApi');
         await api.deleteBoard(board.boardCode);
 
-        // 보드 목록 캐시에서 제거하여 목록 화면이 즉시 반영되도록 함
-        try {
-          const { getBoardsCache, saveBoardsCache } = await import('../utils/boardsCache');
-          const cached = getBoardsCache();
-          if (cached) {
-            const next = cached.filter(b => b.code !== board.boardCode);
-            saveBoardsCache(next);
-          }
-        } catch (e) {
-          // Cache update failed, ignore
-        }
 
         // 팝업을 먼저 닫음
         closeDialog();

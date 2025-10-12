@@ -59,7 +59,7 @@ export class HomeScreen {
       <div class="room-card" data-room-id="${room.boardCode}">
         <div class="room-info">
           <h3>${escapeHtml(room.title)}</h3>
-          ${room.boardCode ? `<span class="room-code">코드: ${room.boardCode}</span>` : ''}
+          ${room.boardCode ? `<span class="room-code">코드 : ${room.boardCode}</span>` : ''}
           <span class="room-role">${room.hasEdit ? '👑 편집 가능' : '👀 읽기 전용'}</span>
         </div>
         <div class="room-meta">

@@ -2,7 +2,6 @@ import { api } from '../api/httpApi';
 import { homeState } from '../utils/homeState';
 import { escapeHtml, showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
-import { getBoardsCache, saveBoardsCache, clearBoardsCache } from '../utils/boardsCache';
 
 export class BoardList {
   private container: HTMLElement;
@@ -27,23 +26,9 @@ export class BoardList {
     this.render();
 
     try {
-      // 1. 캐시 확인 (로그인 응답에서 저장된 boards)
-      const cachedBoards = getBoardsCache();
-
-      if (cachedBoards) {
-        // 캐시가 있으면 즉시 표시 (API 호출 없음)
-        this.boards = cachedBoards.map(b => ({ boardCode: b.code, title: b.title }));
-        this.loading = false;
-        this.render();
-        return;
-      }
-
-      // 2. 캐시가 없으면 API 호출 (fallback)
+      // 항상 서버에서 최신 보드 목록을 가져온다 (캐시 사용 안 함)
       const boards = await api.fetchUserBoards();
       this.boards = boards.map(b => ({ boardCode: b.boardCode, title: b.title }));
-
-      // API 응답을 캐시에 저장
-      saveBoardsCache(boards.map(b => ({ code: b.boardCode, title: b.title })));
 
       this.loading = false;
       this.render();
@@ -257,11 +242,9 @@ export class BoardList {
     try {
       await api.logout();
 
-      // 로그아웃 시 boards 캐시 삭제
-      clearBoardsCache();
-
+      // clearAuth에서 boards 캐시를 포함한 모든 인증 정보를 정리
       const { clearAuth } = await import('../utils/auth');
-      clearAuth();
+      await clearAuth();
       navigateTo('/');
     } catch (error) {
       showErrorPopup('로그아웃에 실패했습니다');
@@ -325,7 +308,7 @@ export class BoardList {
     try {
       await navigator.clipboard.writeText(text);
       const { showToast } = await import('../utils/domHelpers');
-      showToast(`코드:${text} 복사 되었습니다.`, 'success');
+      showToast(`코드: ${text} 복사 되었습니다.`, 'success');
     } catch (err) {
       showErrorPopup('클립보드 복사에 실패했습니다.');
     }
@@ -414,16 +397,6 @@ export class BoardList {
         });
         homeState.saveEditToken(response.boardCode, response.editToken);
 
-        // Update boards cache immediately so list reflects the new board
-        try {
-          const cached = getBoardsCache() ?? [];
-          const exists = cached.some(b => b.code === response.boardCode);
-          if (!exists) {
-            saveBoardsCache([...cached, { code: response.boardCode, title: response.title }]);
-          }
-        } catch (e) {
-          // Cache update failed, ignore
-        }
 
         closePopup();
 
@@ -535,16 +508,6 @@ export class BoardList {
           lastVisited: Date.now(),
         });
 
-        // Update boards cache to include the joined board
-        try {
-          const cached = getBoardsCache() ?? [];
-          const exists = cached.some(b => b.code === result.boardCode);
-          if (!exists) {
-            saveBoardsCache([...cached, { code: result.boardCode, title: result.title }]);
-          }
-        } catch (e) {
-          // Cache update failed, ignore
-        }
 
         closePopup();
 
@@ -556,7 +519,7 @@ export class BoardList {
         joinBtn.textContent = '합류하기';
 
         closePopup();
-        showErrorPopup('해당 보드가 없습니다.');
+        showErrorPopup('이미 합류 되었거나 해당 보드가 없습니다.');
       }
     });
 

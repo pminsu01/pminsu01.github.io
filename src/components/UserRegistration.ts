@@ -194,9 +194,6 @@ export class UserRegistration {
         console.error('[UserRegistration] No token in register response');
       }
 
-      // 🔒 보안: 회원가입 시 이전 사용자 캐시 초기화 (필수)
-      const { clearBoardsCache } = await import('../utils/boardsCache');
-      clearBoardsCache();
 
       showToast('등록 완료! 보드 목록으로 이동합니다...', 'success');
 
