@@ -87,6 +87,8 @@ export class ChoreBoardComponent {
 
     // Delete button
     if (target.closest('.delete-button')) {
+      e.preventDefault();
+      e.stopPropagation();
       const btn = target.closest('.delete-button') as HTMLElement;
       const itemId = btn.dataset.itemId;
       if (!itemId) return;
