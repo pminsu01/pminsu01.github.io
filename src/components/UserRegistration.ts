@@ -209,11 +209,10 @@ export class UserRegistration {
 
       // Show error message only if it's not a network error
       if (!isNetworkError(error)) {
-        // Check if error is "already registered" - show popup and don't navigate
-        if (errorMessage.includes('이미 등록') || errorMessage.includes('already') || errorMessage.includes('존재하는') || errorMessage.includes('duplicate')) {
-          showErrorPopup('기존 등록된 사용자입니다.');
+        if (errorMessage === '이미 존재하는 사용자 ID입니다.') {
+          showErrorPopup('이미 존재하는 사용자입니다');
         } else {
-          showToast('기존 등록된 사용자입니다', 'error');
+          showToast(errorMessage, 'error');
         }
       }
     }
