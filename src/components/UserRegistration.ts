@@ -1,7 +1,6 @@
 import { api } from '../api/httpApi';
-import { showErrorPopup, showToast } from '../utils/domHelpers';
+import { showToast } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
-import { isNetworkError } from '../utils/errors';
 import { saveToken } from '../utils/auth';
 
 const PRESET_COLORS = [
@@ -207,14 +206,7 @@ export class UserRegistration {
       registerBtn.disabled = false;
       registerBtn.classList.remove('loading');
 
-      // Show error message only if it's not a network error
-      if (!isNetworkError(error)) {
-        if (errorMessage === '이미 존재하는 사용자 ID입니다.') {
-          showErrorPopup('이미 존재하는 사용자입니다');
-        } else {
-          showToast(errorMessage, 'error');
-        }
-      }
+      showToast(errorMessage, 'error');
     }
   }
 
