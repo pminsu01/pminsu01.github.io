@@ -39,6 +39,7 @@ export class HomeScreen {
         <div class="empty-state">
           <div class="empty-icon">📋</div>
           <h1>집안일 전쟁은 이제 그만! 평화로운 분담의 세계로 초대합니다.</h1>
+          <br/>
           <p>새로운 보드를 만들거나 기존 보드에 합류하세요</p>
           <div class="cta-buttons">
             <button class="btn-primary" data-action="create">
