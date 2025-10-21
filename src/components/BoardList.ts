@@ -107,6 +107,7 @@ export class BoardList {
         <div class="empty-boards-state">
           <div class="empty-icon">📋</div>
           <h2>집안일 전쟁은 이제 그만! 평화로운 분담의 세계로 초대합니다.</h2>
+          <br/>
           <p class="empty-description">새로운 보드를 만들거나 기존 보드에 합류하세요</p>
           <div class="empty-actions">
             <button class="btn-primary" data-action="create">➕ 새 보드 만들기</button>
