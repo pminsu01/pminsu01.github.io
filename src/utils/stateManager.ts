@@ -37,6 +37,7 @@ export class ChoreboardState {
 
   async loadBoard(boardCode: string, editToken?: string): Promise<void> {
     this.board = await api.fetchBoardWithChores(boardCode, editToken);
+    this.invalidateCache();
     this.notify();
   }
 
@@ -48,9 +49,23 @@ export class ChoreboardState {
     return { ...this.uiState };
   }
 
+  private incompleteItemsCache: ChoreItem[] | null = null;
+  private completedItemsCache: ChoreItem[] | null = null;
+
+  private invalidateCache(): void {
+    this.incompleteItemsCache = null;
+    this.completedItemsCache = null;
+  }
+
   getIncompleteItems(): ChoreItem[] {
     if (!this.board) return [];
-    return this.board.items
+
+    // Use cached result if available
+    if (this.incompleteItemsCache) {
+      return this.incompleteItemsCache;
+    }
+
+    this.incompleteItemsCache = this.board.items
       .filter(item => !item.completed)
       .sort((a, b) => {
         const ao = typeof a.sortOrder === 'number' ? a.sortOrder : Number.MAX_SAFE_INTEGER;
@@ -58,17 +73,27 @@ export class ChoreboardState {
         if (ao !== bo) return ao - bo;
         return a.createdAt.getTime() - b.createdAt.getTime();
       });
+
+    return this.incompleteItemsCache;
   }
 
   getCompletedItems(): ChoreItem[] {
     if (!this.board) return [];
-    return this.board.items
+
+    // Use cached result if available
+    if (this.completedItemsCache) {
+      return this.completedItemsCache;
+    }
+
+    this.completedItemsCache = this.board.items
       .filter(item => item.completed)
       .sort((a, b) => {
         const timeA = a.completedAt?.getTime() || 0;
         const timeB = b.completedAt?.getTime() || 0;
         return timeB - timeA; // Most recent first
       });
+
+    return this.completedItemsCache;
   }
 
   toggleCompletedSection(): void {
@@ -83,6 +108,7 @@ export class ChoreboardState {
     const index = this.board.items.findIndex(i => i.id === itemId);
     if (index !== -1) {
       this.board.items[index] = updatedItem;
+      this.invalidateCache();
       this.notify();
     }
   }
@@ -100,6 +126,7 @@ export class ChoreboardState {
     }
     console.log('[StateManager] API returned:', newItem);
     this.board.items.push(newItem);
+    this.invalidateCache();
     this.notify();
   }
 
@@ -107,6 +134,7 @@ export class ChoreboardState {
     if (!this.board) return;
     await api.deleteChoreItem(this.board.boardCode, itemId);
     this.board.items = this.board.items.filter(i => i.id !== itemId);
+    this.invalidateCache();
     this.notify();
   }
 
@@ -188,6 +216,7 @@ export class ChoreboardState {
         this.board.items[idx] = { ...this.board.items[idx], assignee: idToMember.get(memberId) || null };
       }
     }
+    this.invalidateCache();
     this.notify();
 
     // Persist to server in bulk (fire-and-forget)
@@ -210,6 +239,7 @@ export class ChoreboardState {
     members.forEach(m => idToMember.set(m.id, m));
     const nextAssignee = assigneeId ? (idToMember.get(assigneeId) || null) : null;
     this.board.items[idx] = { ...this.board.items[idx], assignee: nextAssignee };
+    this.invalidateCache();
     this.notify();
 
     // Persist via bulk endpoint with single-item list
@@ -229,6 +259,7 @@ export class ChoreboardState {
       // Preserve local sortOrder if API doesn't return it
       const prevOrder = this.board.items[index].sortOrder;
       this.board.items[index] = { ...updatedItem, sortOrder: updatedItem.sortOrder ?? prevOrder };
+      this.invalidateCache();
       this.notify();
     }
   }
@@ -257,6 +288,7 @@ export class ChoreboardState {
       return { ...it, sortOrder: so ?? it.sortOrder };
     });
 
+    this.invalidateCache();
     this.notify();
 
     // Fire-and-forget API call for the moved item only

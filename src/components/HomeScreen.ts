@@ -2,6 +2,8 @@ import { homeState, type RecentRoom } from '../utils/homeState';
 import { api } from '../api/httpApi';
 import { escapeHtml, showToast } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
+import { formatRelativeTime } from '../utils/dateHelpers';
+import { createInputDialog } from '../utils/dialogHelpers';
 
 type UIStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -63,7 +65,7 @@ export class HomeScreen {
           <span class="room-role">${room.hasEdit ? '👑 편집 가능' : '👀 읽기 전용'}</span>
         </div>
         <div class="room-meta">
-          <span class="last-visited">${this.formatTime(room.lastVisited)}</span>
+          <span class="last-visited">${formatRelativeTime(room.lastVisited)}</span>
           <button class="btn-icon" data-action="open" data-room-id="${room.boardCode}">→</button>
         </div>
       </div>
@@ -108,86 +110,15 @@ export class HomeScreen {
   }
 
   private handleCreate(): void {
-    this.showTitleInputDialog();
-  }
-
-  private showTitleInputDialog(): void {
-    const overlay = document.createElement('div');
-    overlay.className = 'title-dialog-overlay';
-    overlay.innerHTML = `
-      <div class="title-dialog">
-        <h3>새 보드 만들기</h3>
-        <input
-          type="text"
-          class="title-dialog-input"
-          placeholder="보드 이름을 입력하세요"
-          maxlength="50"
-          autofocus
-        />
-        <div class="dialog-actions">
-          <button class="btn-secondary" data-action="cancel">취소</button>
-          <button class="btn-primary" data-action="create">생성</button>
-        </div>
-      </div>
-    `;
-
-    const input = overlay.querySelector('.title-dialog-input') as HTMLInputElement;
-    const cancelBtn = overlay.querySelector('[data-action="cancel"]') as HTMLButtonElement;
-    const createBtn = overlay.querySelector('[data-action="create"]') as HTMLButtonElement;
-
-    // Focus input after render
-    setTimeout(() => input.focus(), 10);
-
-    // Cancel handler
-    cancelBtn.addEventListener('click', () => {
-      overlay.remove();
-    });
-
-    // Create handler
-    const handleCreateClick = async () => {
-      const title = input.value.trim();
-
-      if (!title) {
-        input.focus();
-        input.classList.add('error');
-        setTimeout(() => input.classList.remove('error'), 300);
-        return;
-      }
-
-      // Disable buttons during creation
-      createBtn.disabled = true;
-      cancelBtn.disabled = true;
-      createBtn.classList.add('loading');
-
-      try {
+    createInputDialog({
+      title: '새 보드 만들기',
+      placeholder: '보드 이름을 입력하세요',
+      confirmText: '생성',
+      cancelText: '취소',
+      onConfirm: async (title) => {
         await this.createBoardWithTitle(title);
-        overlay.remove();
-      } catch (error) {
-        // Re-enable buttons on error
-        createBtn.disabled = false;
-        cancelBtn.disabled = false;
-        createBtn.classList.remove('loading');
-        overlay.remove();
-      }
-    };
-
-    createBtn.addEventListener('click', handleCreateClick);
-
-    // Enter key handler
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        handleCreateClick();
-      }
+      },
     });
-
-    // Escape key handler
-    overlay.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        overlay.remove();
-      }
-    });
-
-    document.body.appendChild(overlay);
   }
 
   private async createBoardWithTitle(title: string): Promise<void> {
@@ -215,7 +146,7 @@ export class HomeScreen {
         error: error instanceof Error ? error.message : '보드 생성 실패',
       });
       showToast('보드를 생성할 수 없습니다. 다시 시도해주세요.', 'error');
-      this.showRetryDialog(() => this.showTitleInputDialog());
+      throw error; // Re-throw to let dialog handle it
     }
   }
 
@@ -269,44 +200,6 @@ export class HomeScreen {
     });
   }
 
-  private showRetryDialog(retryFn: () => void): void {
-    const overlay = document.createElement('div');
-    overlay.className = 'retry-dialog-overlay';
-    overlay.innerHTML = `
-      <div class="retry-dialog">
-        <h3>⚠️ 연결 실패</h3>
-        <p>서버에 연결할 수 없습니다.</p>
-        <div class="dialog-actions">
-          <button class="btn-secondary" data-action="cancel">취소</button>
-          <button class="btn-primary" data-action="retry">다시 시도</button>
-        </div>
-      </div>
-    `;
-
-    overlay.querySelector('[data-action="cancel"]')?.addEventListener('click', () => {
-      overlay.remove();
-    });
-
-    overlay.querySelector('[data-action="retry"]')?.addEventListener('click', () => {
-      overlay.remove();
-      retryFn();
-    });
-
-    document.body.appendChild(overlay);
-  }
-
-  private formatTime(timestamp: number): string {
-    const diff = Date.now() - timestamp;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days}일 전`;
-    if (hours > 0) return `${hours}시간 전`;
-    if (minutes > 0) return `${minutes}분 전`;
-    return '방금 전';
-  }
 
 
   destroy(): void {

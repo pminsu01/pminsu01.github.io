@@ -2,6 +2,8 @@ import type { ChoreItem, User } from '../models/types';
 import { state } from '../utils/stateManager';
 import { escapeHtml } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
+import { formatTime, formatDateTime } from '../utils/dateHelpers';
+import { createDialog } from '../utils/dialogHelpers';
 
 export class ChoreBoardComponent {
   private container: HTMLElement;
@@ -303,7 +305,7 @@ export class ChoreBoardComponent {
   }
 
   private renderHeader(title: string, editable: boolean, creatorName: string, isRemove?: boolean, createdAt?: Date): string {
-    const formattedDate = createdAt ? this.formatCreatedAt(createdAt) : '';
+    const formattedDate = createdAt ? formatDateTime(createdAt) : '';
     return `
       <div class="board-header">
         <div class="header-top">
@@ -357,7 +359,7 @@ export class ChoreBoardComponent {
   }
 
   private renderChoreItem(item: ChoreItem, isCompleted: boolean): string {
-    const timeStr = item.completedAt ? this.formatTime(item.completedAt) : '';
+    const timeStr = item.completedAt ? formatTime(item.completedAt) : '';
     const assigneeBadge = item.assignee
       ? `<span class=\"assignee-badge ${isCompleted ? '' : 'clickable'}\" data-item-id=\"${item.id}\" style=\"background-color: ${item.assignee.color}\">${escapeHtml(item.assignee.nickname)}</span>`
       : `<span class=\"assignee-badge unassigned ${isCompleted ? '' : 'clickable'}\" data-item-id=\"${item.id}\">미배정</span>`;
@@ -478,116 +480,21 @@ export class ChoreBoardComponent {
   }
 
   private showDeleteConfirmation(board: { boardCode: string; title: string }): void {
-    // 기존 팝업이 있다면 먼저 제거 (중복 방지)
-    const existingOverlay = document.querySelector('.delete-dialog-overlay');
-    if (existingOverlay) {
-      existingOverlay.remove();
-    }
-
-    const overlay = document.createElement('div');
-    overlay.className = 'delete-dialog-overlay';
-
-    const dialog = document.createElement('div');
-    dialog.className = 'delete-dialog';
-    dialog.innerHTML = `
-      <div class="delete-dialog-header">
-        <h3>보드 삭제</h3>
-      </div>
-      <div class="delete-dialog-body">
-        <p>삭제하시겠습니까?</p>
-      </div>
-      <div class="delete-dialog-footer">
-        <button class="btn-secondary delete-cancel">취소</button>
-        <button class="btn-danger delete-confirm">확인</button>
-      </div>
-    `;
-
-    overlay.appendChild(dialog);
-    document.body.appendChild(overlay);
-
-    const cancelBtn = dialog.querySelector('.delete-cancel') as HTMLButtonElement;
-    const confirmBtn = dialog.querySelector('.delete-confirm') as HTMLButtonElement;
-
-    let isClosing = false; // 중복 닫기 방지 플래그
-
-    // Escape key handler
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closeDialog();
-      }
-    };
-
-    // Overlay click handler
-    const handleOverlayClick = (e: Event) => {
-      if (e.target === overlay) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeDialog();
-      }
-    };
-
-    // Cancel button handler
-    const handleCancel = (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-      closeDialog();
-    };
-
-    // Confirm button handler
-    const handleConfirm = async (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (confirmBtn.disabled) return; // 중복 클릭 방지
-
-      confirmBtn.disabled = true;
-      confirmBtn.textContent = '삭제 중...';
-
-      try {
+    createDialog({
+      title: '보드 삭제',
+      message: '삭제하시겠습니까?',
+      confirmText: '확인',
+      cancelText: '취소',
+      isDangerous: true,
+      onConfirm: async () => {
         const { api } = await import('../api/httpApi');
         await api.deleteBoard(board.boardCode);
-
-
-        // 팝업을 먼저 닫음
-        closeDialog();
 
         // 팝업 DOM이 완전히 제거될 때까지 대기 후 페이지 이동
         await new Promise(resolve => setTimeout(resolve, 150));
         navigateTo('/boards');
-      } catch (error) {
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = '확인';
-        closeDialog();
-
-        const errorMessage = error instanceof Error ? error.message : '보드 삭제에 실패했습니다';
-        alert(`보드 삭제 실패: ${errorMessage}`);
-      }
-    };
-
-    const closeDialog = () => {
-      if (isClosing) return; // 이미 닫히는 중이면 무시
-      isClosing = true;
-
-      // 모든 이벤트 리스너 제거
-      document.removeEventListener('keydown', handleEscape);
-      overlay.removeEventListener('click', handleOverlayClick);
-      cancelBtn.removeEventListener('click', handleCancel);
-      confirmBtn.removeEventListener('click', handleConfirm);
-
-      overlay.remove();
-    };
-
-    // 이벤트 리스너 등록
-    document.addEventListener('keydown', handleEscape);
-    overlay.addEventListener('click', handleOverlayClick);
-    cancelBtn.addEventListener('click', handleCancel);
-    confirmBtn.addEventListener('click', handleConfirm);
-
-    // Show dialog with animation
-    setTimeout(() => {
-      overlay.classList.add('show');
-    }, 10);
+      },
+    });
   }
 
   // Drag & Drop handlers
@@ -648,35 +555,4 @@ export class ChoreBoardComponent {
     this.draggingId = null;
   }
 
-  private formatTime(date: Date): string {
-    try {
-      const f = new Intl.DateTimeFormat('ko-KR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: 'Asia/Seoul',
-      });
-      // Intl returns like "오전 09:30" if hour12 true; with hour12 false we get 09:30
-      return f.format(date);
-    } catch (e) {
-      // Fallback to local time if Intl/timeZone not supported
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    }
-  }
-
-  private formatCreatedAt(date: Date): string {
-    try {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      const seconds = date.getSeconds().toString().padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    } catch (e) {
-      return '';
-    }
-  }
 }
