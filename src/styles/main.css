@@ -1262,7 +1262,8 @@ body {
 }
 
 .user-client-id-input,
-.user-nickname-input {
+.user-nickname-input,
+.verification-code-input {
   width: 100%;
   padding: 14px 16px;
   border: 2px solid #e5e7eb;
@@ -1273,7 +1274,8 @@ body {
 }
 
 .user-client-id-input:focus,
-.user-nickname-input:focus {
+.user-nickname-input:focus,
+.verification-code-input:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
@@ -2148,4 +2150,68 @@ body {
 .btn-danger:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+
+/* Inline email + verification button layout for User Registration */
+.email-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.email-input-wrapper .user-client-id-input,
+.email-input-wrapper .verification-code-input {
+  flex: 1 1 auto;
+  min-width: 0; /* prevent overflow */
+}
+
+.btn-verification-inline {
+  white-space: nowrap;
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+  padding: 12px 14px; /* visually matches 14px input padding */
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.btn-verification-inline:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn-verification-inline:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+@media (max-width: 360px) {
+  .email-input-wrapper {
+    gap: 6px;
+  }
+  .btn-verification-inline {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Verified/disabled email input style (gray background) */
+.user-client-id-input.verified,
+.verification-code-input.verified {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+}
+
+.user-client-id-input.verified:focus,
+.verification-code-input.verified:focus {
+  outline: none;
+  border-color: #d1d5db;
+  box-shadow: none;
 }

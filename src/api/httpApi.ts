@@ -195,14 +195,17 @@ class HttpAPI {
     return apiClient.get('/auth/status', undefined, true);
   }
 
-  /**d
+  /**
    * Fetches all boards for the authenticated user
    * Uses JWT token to identify user (extracted on backend from Authorization header)
    */
   async fetchUserBoards(): Promise<Array<{ boardCode: string; title: string }>> {
     const data = await apiClient.get<UserBoardsResponse>('/users/boards');
 
+    console.log('[fetchUserBoards] Response data:', data);
+
     if (!Array.isArray(data?.boards)) {
+      console.warn('[fetchUserBoards] data.boards is not an array:', data);
       return [];
     }
 
@@ -213,14 +216,29 @@ class HttpAPI {
   }
 
   /**
+   * Sends verification code to email
+   */
+  async sendVerification(email: string): Promise<void> {
+    await apiClient.post('/auth/send-verification', { email });
+  }
+
+  /**
+   * Verifies email with verification code
+   */
+  async verifyEmail(email: string, code: string): Promise<void> {
+    await apiClient.post('/auth/verify-email', { email, code });
+  }
+
+  /**
    * Registers a new user and returns token+user
    */
   async registerUser(
     userId: string,
     nickname: string,
-    color: string
+    color: string,
+    verificationCode: string
   ): Promise<{ token: string; user: { userId: string; nickname: string; color: string; createdAt: string } }> {
-    const data = await apiClient.post('/auth/register', { userId, nickname, color });
+    const data = await apiClient.post('/auth/register', { userId, nickname, color, verificationCode });
 
     return {
       token: String(data.token),

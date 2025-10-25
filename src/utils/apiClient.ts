@@ -29,6 +29,7 @@ class ApiClient {
    * - Authorization Bearer 토큰 자동 전송
    * - 401/403 에러 자동 처리 (재로그인 유도)
    * - JSON 자동 파싱
+   * - 새로운 응답 구조: {code, message, data}
    */
   private async request<T = any>(
     endpoint: string,
@@ -86,19 +87,29 @@ class ApiClient {
         );
       }
 
-      // HTTP 에러 처리
-      if (!response.ok) {
-        const errorMessage = await this.extractErrorMessage(response);
-        throw new Error(errorMessage);
-      }
-
       // 204 No Content 처리
       if (response.status === 204) {
         return null as T;
       }
 
       // JSON 응답 파싱
-      return response.json();
+      const responseData = await response.json();
+
+      // 새로운 응답 구조 처리: {code, message, data}
+      // HTTP 200 OK이지만 code가 '0000'이 아니면 에러로 처리
+      if (response.ok) {
+        if (responseData.code && responseData.code !== '0000') {
+          // 비즈니스 로직 에러
+          const errorMessage = responseData.message || '요청 처리에 실패했습니다';
+          throw new Error(errorMessage);
+        }
+        // 성공: data 필드 반환
+        return responseData.data as T;
+      }
+
+      // HTTP 에러 처리 (200번대가 아닌 경우)
+      const errorMessage = await this.extractErrorMessage(response, responseData);
+      throw new Error(errorMessage);
     } catch (error) {
       // NetworkError는 그대로 throw
       if (error instanceof NetworkError) {
@@ -123,13 +134,20 @@ class ApiClient {
   /**
    * 에러 메시지 추출
    */
-  private async extractErrorMessage(response: Response): Promise<string> {
+  private async extractErrorMessage(response: Response, responseData?: any): Promise<string> {
     try {
-      const data = await response.json();
-      if (data && data.message) {
-        return data.message;
-      } else if (data && data.error && data.error.message) {
-        return data.error.message;
+      // 이미 파싱된 데이터가 있으면 사용
+      if (responseData) {
+        if (responseData.message) {
+          return responseData.message;
+        }
+      } else {
+        const data = await response.json();
+        if (data && data.message) {
+          return data.message;
+        } else if (data && data.error && data.error.message) {
+          return data.error.message;
+        }
       }
     } catch {
       // JSON 파싱 실패 시 무시

@@ -18,16 +18,16 @@ export class ParticipantLogin {
         <div class="login-card">
           <div class="login-icon">🎯</div>
           <h1>집안일 보드</h1>
-          <p class="login-subtitle">사용자 ID를 입력하여 내 보드를 확인하세요</p>
+          <p class="login-subtitle">사용자 Email를 입력하여 내 보드를 확인하세요</p>
 
           <div class="login-form">
             <div class="input-group">
-              <label for="user-id">사용자 ID</label>
+              <label for="user-id">사용자 Email</label>
               <input
                 type="text"
                 id="user-id"
                 class="user-id-input"
-                placeholder="사용자 ID를 입력하세요"
+                placeholder="사용자 Email을 입력하세요"
                 autofocus
               />
             </div>
@@ -96,13 +96,20 @@ export class ParticipantLogin {
       // localStorage 방식: 응답에서 토큰을 받아 localStorage에 저장
       const response = await api.login(userId);
 
+      console.log('[ParticipantLogin] Login response:', response);
+
       // JWT 토큰 저장
       if (response.token) {
         saveToken(response.token);
+        console.log('[ParticipantLogin] Token saved successfully');
       } else {
-        console.error('[ParticipantLogin] No token in login response');
+        console.error('[ParticipantLogin] No token in login response:', response);
       }
 
+      // 보드 정보 로깅
+      if (response.boards) {
+        console.log('[ParticipantLogin] Boards in response:', response.boards);
+      }
 
       // Navigate to board list
       navigateTo('/boards');
@@ -114,7 +121,7 @@ export class ParticipantLogin {
 
       // Show error popup only if it's not a network error (which is handled globally)
       if (!isNetworkError(error)) {
-        showErrorPopup('로그인에 실패했습니다. 사용자 ID를 확인하세요.');
+        showErrorPopup('로그인에 실패했습니다. 사용자 Email을 확인하세요.');
       }
     }
   }

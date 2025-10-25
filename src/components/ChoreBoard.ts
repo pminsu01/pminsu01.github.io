@@ -77,7 +77,7 @@ export class ChoreBoardComponent {
     if (target.closest('.info-fab')) {
       e.preventDefault();
       e.stopPropagation();
-      alert('집안일 분배 앱 v1.0\n\n미완료된 일들을 팀원들에게 랜덤으로 배정할 수 있습니다.');
+      alert('집안일 분배 앱 v1.0\n\n팀원들에게 집안일을 분배해보세요.');
       return;
     }
 
