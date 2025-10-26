@@ -4,6 +4,7 @@ import { escapeHtml } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { formatTime, formatDateTime } from '../utils/dateHelpers';
 import { createDialog } from '../utils/dialogHelpers';
+import { setupEnterKeyHandler } from '../utils/inputHelpers';
 
 export class ChoreBoardComponent {
   private container: HTMLElement;
@@ -164,19 +165,12 @@ export class ChoreBoardComponent {
   }
 
   private async handleKeyPress(e: KeyboardEvent): Promise<void> {
-    const target = e.target as HTMLInputElement;
-
     // Close assignee picker on Escape
     if (e.key === 'Escape') {
       this.closeAssigneePicker();
     }
 
-    // Add item on Enter
-    if (target.id === 'new-item-title' && e.key === 'Enter') {
-      e.preventDefault();
-      e.stopPropagation();
-      await this.addItem();
-    }
+    // Note: Enter key handling for new-item-title is done in setupInputListeners
   }
 
   private async addItem(): Promise<void> {
@@ -294,6 +288,16 @@ export class ChoreBoardComponent {
         ${this.renderFloatingActions()}
       </div>
     `;
+
+    // Setup Korean input handling for new item input
+    this.setupInputListeners();
+  }
+
+  private setupInputListeners(): void {
+    const titleInput = this.container.querySelector('#new-item-title') as HTMLInputElement;
+    if (titleInput) {
+      setupEnterKeyHandler(titleInput, () => this.addItem());
+    }
   }
 
   private renderHeader(title: string, editable: boolean, creatorName: string, isRemove?: boolean, createdAt?: Date): string {

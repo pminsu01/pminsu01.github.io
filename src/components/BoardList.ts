@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { homeState } from '../utils/homeState';
 import { escapeHtml, showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
+import { setupEnterKeyHandler } from '../utils/inputHelpers';
 
 export class BoardList {
   private container: HTMLElement;
@@ -421,12 +422,8 @@ export class BoardList {
       }
     });
 
-    // Enter key
-    titleInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        createBtn.click();
-      }
-    });
+    // Enter key - with Korean IME support
+    setupEnterKeyHandler(titleInput, () => createBtn.click());
 
     // Show popup with animation
     setTimeout(() => {
@@ -532,12 +529,8 @@ export class BoardList {
       }
     });
 
-    // Enter key
-    pinInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        joinBtn.click();
-      }
-    });
+    // Enter key - with Korean IME support
+    setupEnterKeyHandler(pinInput, () => joinBtn.click());
 
     // Show popup with animation
     setTimeout(() => {

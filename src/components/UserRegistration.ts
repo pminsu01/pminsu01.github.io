@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { showToast } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { saveToken } from '../utils/auth';
+import { setupEnterKeyHandler } from '../utils/inputHelpers';
 
 const PRESET_COLORS = [
   { name: '레드', hex: '#ef4444' },
@@ -187,15 +188,16 @@ export class UserRegistration {
     // Register button
     registerBtn.addEventListener('click', () => this.handleRegister());
 
-    // Enter key on inputs
-    const handleEnter = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        this.handleRegister();
-      }
-    };
-    if (userIdInput) userIdInput.addEventListener('keypress', handleEnter);
-    if (verificationCodeInput) verificationCodeInput.addEventListener('keypress', handleEnter);
-    if (nicknameInput) nicknameInput.addEventListener('keypress', handleEnter);
+    // Enter key on inputs - with Korean IME support
+    if (userIdInput) {
+      setupEnterKeyHandler(userIdInput, () => this.handleRegister());
+    }
+    if (verificationCodeInput) {
+      setupEnterKeyHandler(verificationCodeInput, () => this.handleRegister());
+    }
+    if (nicknameInput) {
+      setupEnterKeyHandler(nicknameInput, () => this.handleRegister());
+    }
 
     // Back to login
     this.container.querySelector('[data-action="back"]')?.addEventListener('click', () => {

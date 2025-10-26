@@ -3,11 +3,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* 터치 최적화 */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 html {
   overflow-x: hidden;
   width: 100%;
+  /* 모바일 웹 최적화 */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -16,9 +22,13 @@ body {
   color: #111827;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   width: 100%;
   position: relative;
+  /* 터치 스크롤 최적화 */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
 }
 
 #app {
@@ -27,6 +37,21 @@ body {
   justify-content: center;
   align-items: flex-start;  /* 위쪽 정렬로 변경 (중앙 배치 제거) */
   padding: 16px;
+}
+
+/* 모든 입력 필드 최적화 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  /* 모바일 웹뷰 입력 최적화 */
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-appearance: none;
+  appearance: none;
+  /* 한글 입력 최적화 */
+  ime-mode: active;
+  -webkit-ime-mode: active;
 }
 
 /* Chore Board Container */
@@ -375,6 +400,12 @@ body {
   padding: 8px 12px;
   font-size: 14px;
   outline: none;
+  /* 모바일 입력 최적화 */
+  -webkit-user-select: text;
+  user-select: text;
+  /* 안드로이드 자동완성 스타일 제거 */
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .title-input:focus {
