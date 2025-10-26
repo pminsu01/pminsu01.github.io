@@ -68,7 +68,7 @@ export class ChoreBoardComponent {
     if (target.closest('.random-assign-btn')) {
       e.preventDefault();
       e.stopPropagation();
-      if (confirm('미완료된 일들을 복불복으로 배정하시겠습니까?')) {
+      if (confirm('미분배된 일들을 복불복으로 배정하시겠습니까?')) {
         await state.randomAssign();
       }
       return;
