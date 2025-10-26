@@ -4,13 +4,15 @@ import { ChoreBoardComponent } from './components/ChoreBoard';
 import { ParticipantLogin } from './components/ParticipantLogin';
 import { BoardList } from './components/BoardList';
 import { UserRegistration } from './components/UserRegistration';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { UserSecurity } from './components/UserSecurity';
 import { homeState } from './utils/homeState';
 import { state } from './utils/stateManager';
 import { api } from './api/httpApi';
 import { isNetworkError } from './utils/errors';
 import { showNetworkErrorPopup } from './utils/domHelpers';
 
-type Route = 'login' | 'register' | 'home' | 'board' | 'boardList';
+type Route = 'login' | 'register' | 'home' | 'board' | 'boardList' | 'privacyPolicy' | 'userSecurity';
 
 interface RouterState {
   route: Route;
@@ -18,7 +20,7 @@ interface RouterState {
 }
 
 class Router {
-  private currentScreen: HomeScreen | ChoreBoardComponent | ParticipantLogin | BoardList | UserRegistration | null = null;
+  private currentScreen: HomeScreen | ChoreBoardComponent | ParticipantLogin | BoardList | UserRegistration | PrivacyPolicy | UserSecurity | null = null;
   private container: HTMLElement;
 
   constructor(container: HTMLElement) {
@@ -79,6 +81,16 @@ class Router {
       return { route: 'home', params: {} };
     }
 
+    // /privacy-policy
+    if (pathParts[0] === 'privacy-policy') {
+      return { route: 'privacyPolicy', params: {} };
+    }
+
+    // /user-security
+    if (pathParts[0] === 'user-security') {
+      return { route: 'userSecurity', params: {} };
+    }
+
     return { route: 'login', params: {} };
   }
 
@@ -115,6 +127,10 @@ class Router {
       this.renderBoardList(params.userId);
     } else if (route === 'board') {
       await this.renderBoard(params.boardCode, params.t);
+    } else if (route === 'privacyPolicy') {
+      this.renderPrivacyPolicy();
+    } else if (route === 'userSecurity') {
+      this.renderUserSecurity();
     }
   }
 
@@ -132,6 +148,14 @@ class Router {
 
   private renderBoardList(userId?: string): void {
     this.currentScreen = new BoardList(this.container, userId);
+  }
+
+  private renderPrivacyPolicy(): void {
+    this.currentScreen = new PrivacyPolicy(this.container);
+  }
+
+  private renderUserSecurity(): void {
+    this.currentScreen = new UserSecurity(this.container);
   }
 
   private async renderBoard(boardCode: string, editToken?: string): Promise<void> {
