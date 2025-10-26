@@ -108,12 +108,11 @@ class HttpAPI {
    * TODO: editToken 처리 방식 개선 필요 (현재는 X-Edit-Token 헤더 사용)
    */
   async fetchBoardWithChores(boardCode: string, editToken?: string): Promise<ChoreBoard> {
-    const date = formatDateForApi();
     const headers = editToken ? { 'X-Edit-Token': editToken } : undefined;
 
     const [boardData, itemsData] = await Promise.all([
       apiClient.get(`/boards/${boardCode}`, headers),
-      apiClient.get(`/boards/${boardCode}/chores?date=${encodeURIComponent(date)}`, headers),
+      apiClient.get(`/boards/${boardCode}/chores`, headers),
     ]);
 
     const board = composeBoardFromApiResponse(boardData, itemsData);

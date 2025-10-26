@@ -18,7 +18,7 @@ export class ParticipantLogin {
         <div class="login-card">
           <div class="login-icon">🎯</div>
           <h1>집안일 보드</h1>
-          <p class="login-subtitle">사용자 Email를 입력하여 내 보드를 확인하세요</p>
+          <p class="login-subtitle">사용자 Email을 입력하여 내 보드를 확인하세요</p>
 
           <div class="login-form">
             <div class="input-group">

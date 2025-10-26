@@ -106,7 +106,7 @@ export class BoardList {
         </div>
         <div class="empty-boards-state">
           <div class="empty-icon">📋</div>
-          <h2>집안일 전쟁은 이제 그만! 평화로운 분담의 세계로 초대합니다.</h2>
+          <h2>집안일 전쟁은 이제 그만!<br/>평화로운 분담의 세계로 초대합니다.</h2>
           <br/>
           <p class="empty-description">새로운 보드를 만들거나 기존 보드에 합류하세요</p>
           <div class="empty-actions">
@@ -157,6 +157,9 @@ export class BoardList {
               ${boardsHTML}
             </div>
           </section>
+        </div>
+        <div class="floating-actions">
+          <button class="fab info-fab" aria-label="Info" title="정보" data-action="info">ⓘ</button>
         </div>
       </div>
     `;
@@ -302,6 +305,11 @@ export class BoardList {
     // Join board
     this.container.querySelector('[data-action="join"]')?.addEventListener('click', () => {
       this.handleJoinBoard();
+    });
+
+    // Info button
+    this.container.querySelector('[data-action="info"]')?.addEventListener('click', () => {
+      alert('집안일 분배 앱 v1.0\n\n팀원들에게 집안일을 분배해보세요. \n\n관련 문의 사항 있으면 개발자에게 연락주세요. \n\nchoresboard@gmail.com');
     });
   }
 

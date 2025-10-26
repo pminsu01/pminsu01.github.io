@@ -63,21 +63,13 @@ export class ChoreBoardComponent {
       return;
     }
 
-    // Random assign FAB
-    if (target.closest('.random-fab')) {
+    // Random assign button
+    if (target.closest('.random-assign-btn')) {
       e.preventDefault();
       e.stopPropagation();
-      if (confirm('미완료된 일들을 랜덤으로 배정하시겠습니까?')) {
+      if (confirm('미완료된 일들을 복불복으로 배정하시겠습니까?')) {
         await state.randomAssign();
       }
-      return;
-    }
-
-    // Info FAB
-    if (target.closest('.info-fab')) {
-      e.preventDefault();
-      e.stopPropagation();
-      alert('집안일 분배 앱 v1.0\n\n팀원들에게 집안일을 분배해보세요.');
       return;
     }
 
@@ -332,6 +324,7 @@ export class ChoreBoardComponent {
       <div class="section incomplete-section">
         <div class="section-header">
           <h2>미완료 (${items.length})</h2>
+          <button class="random-assign-btn" aria-label="Random assign" title="무작위">랜덤 배정</button>
         </div>
         <div class="items-list">
           ${items.length === 0 ? '<div class="empty-state">해야할 일이 없습니다</div>' : ''}
@@ -400,12 +393,7 @@ export class ChoreBoardComponent {
   }
 
   private renderFloatingActions(): string {
-    return `
-      <div class="floating-actions">
-        <button class="fab info-fab" aria-label="Info" title="정보">ⓘ</button>
-        <button class="fab random-fab" aria-label="Random assign" title="랜덤 배정">Ⓞ</button>
-      </div>
-    `;
+    return '';
   }
 
   // Opens a simple modal with buttons to pick an assignee

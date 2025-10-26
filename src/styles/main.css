@@ -176,6 +176,29 @@ body {
   color: #374151;
 }
 
+.random-assign-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.random-assign-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.random-assign-btn:active {
+  transform: scale(0.98);
+}
+
 .collapse-toggle {
   background: none;
   border: none;
@@ -492,6 +515,11 @@ body {
 
   .section-header h2 {
     font-size: 13px;
+  }
+
+  .random-assign-btn {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 
   /* Chore items */
