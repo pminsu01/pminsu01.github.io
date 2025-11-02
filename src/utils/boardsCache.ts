@@ -22,7 +22,6 @@ export interface CachedBoard {
 function getCacheKey(): string | null {
   const userId = getUserIdFromToken();
   if (!userId) {
-    console.warn('[BoardsCache] No userId found in token');
     return null;
   }
   return `${BOARDS_CACHE_PREFIX}:${userId}`;
@@ -35,15 +34,13 @@ export function saveBoardsCache(boards: CachedBoard[]): void {
   try {
     const cacheKey = getCacheKey();
     if (!cacheKey) {
-      console.warn('[BoardsCache] Cannot save - no cache key');
       return;
     }
 
     const data = JSON.stringify(boards);
     sessionStorage.setItem(cacheKey, data);
-    console.log('[BoardsCache] Saved boards to cache:', boards.length, 'for key:', cacheKey);
   } catch (error) {
-    console.error('[BoardsCache] Failed to save boards:', error);
+    // Silent fail
   }
 }
 
@@ -55,13 +52,11 @@ export function getBoardsCache(): CachedBoard[] | null {
   try {
     const cacheKey = getCacheKey();
     if (!cacheKey) {
-      console.warn('[BoardsCache] Cannot get - no cache key');
       return null;
     }
 
     const data = sessionStorage.getItem(cacheKey);
     if (!data) {
-      console.log('[BoardsCache] No cache found for key:', cacheKey);
       return null;
     }
 
@@ -69,15 +64,12 @@ export function getBoardsCache(): CachedBoard[] | null {
 
     // Validate cache structure
     if (!Array.isArray(boards)) {
-      console.warn('[BoardsCache] Invalid cache structure');
       clearBoardsCache();
       return null;
     }
 
-    console.log('[BoardsCache] Retrieved boards from cache:', boards.length, 'for key:', cacheKey);
     return boards;
   } catch (error) {
-    console.error('[BoardsCache] Failed to retrieve boards:', error);
     clearBoardsCache();
     return null;
   }
@@ -96,9 +88,8 @@ export function clearBoardsCache(): void {
     }
 
     sessionStorage.removeItem(cacheKey);
-    console.log('[BoardsCache] Cache cleared for key:', cacheKey);
   } catch (error) {
-    console.error('[BoardsCache] Failed to clear cache:', error);
+    // Silent fail
   }
 }
 
@@ -118,9 +109,8 @@ export function clearAllBoardsCaches(): void {
     }
 
     keysToRemove.forEach(key => sessionStorage.removeItem(key));
-    console.log('[BoardsCache] Cleared all boards caches:', keysToRemove.length);
   } catch (error) {
-    console.error('[BoardsCache] Failed to clear all caches:', error);
+    // Silent fail
   }
 }
 

@@ -1248,10 +1248,81 @@ textarea {
   padding: 0 16px;
 }
 
+/* Google Login Button Styles */
+.google-login-wrapper,
+.google-login-container {
+  width: 100%;
+  margin: 16px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-google-fallback {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-google-fallback:not(:disabled):hover {
+  background: #f8f9fa;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+.btn-google-fallback:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-google-fallback svg {
+  flex-shrink: 0;
+}
+
 .alternative-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: center;
+}
+
+/* Email Registration Button (Google style) */
+.btn-email-register {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-email-register:not(:disabled):hover {
+  background: #f8f9fa;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+.btn-email-register:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .user-id-input {

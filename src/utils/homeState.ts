@@ -29,7 +29,7 @@ export class HomeState {
       try {
         return JSON.parse(stored);
       } catch (e) {
-        console.warn('[HomeState] Failed to parse identity, creating new');
+        // Create new identity
       }
     }
 
@@ -51,7 +51,7 @@ export class HomeState {
       try {
         return JSON.parse(stored);
       } catch (e) {
-        console.warn('[HomeState] Failed to parse recent rooms');
+        // Return empty array
       }
     }
     return [];

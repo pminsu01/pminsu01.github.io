@@ -454,7 +454,6 @@ export class ChoreBoardComponent {
       const { showToast } = await import('../utils/domHelpers');
       showToast(`코드: ${board.boardCode} 복사 되었습니다.`, 'success');
     } catch (err) {
-      console.error('[ChoreBoard] Failed to copy board code:', err);
       alert('클립보드 복사에 실패했습니다.');
     }
   }

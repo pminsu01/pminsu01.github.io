@@ -3,6 +3,7 @@ import { showToast } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { saveToken } from '../utils/auth';
 import { setupEnterKeyHandler } from '../utils/inputHelpers';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
 const PRESET_COLORS = [
   { name: '레드', hex: '#ef4444' },
@@ -27,6 +28,7 @@ export class UserRegistration {
   private currentEmail: string = ''; // 현재 입력된 이메일 저장
   private countdownInterval: number | null = null;
   private remainingSeconds: number = 0;
+  private googleLoginButton: GoogleLoginButton | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -138,6 +140,14 @@ export class UserRegistration {
     `;
 
     this.attachListeners();
+    this.setupGoogleLogin();
+  }
+
+  private setupGoogleLogin(): void {
+    const googleWrapper = this.container.querySelector('.google-login-wrapper') as HTMLElement;
+    if (googleWrapper) {
+      this.googleLoginButton = new GoogleLoginButton(googleWrapper, 'registration-google-button');
+    }
   }
 
   private attachListeners(): void {
@@ -384,8 +394,6 @@ export class UserRegistration {
       // JWT 토큰 저장
       if (response.token) {
         saveToken(response.token);
-      } else {
-        console.error('[UserRegistration] No token in register response');
       }
 
       showToast('등록 완료! 보드 목록으로 이동합니다...', 'success');
@@ -408,5 +416,11 @@ export class UserRegistration {
   destroy(): void {
     // 타이머 정리
     this.stopCountdown();
+
+    // Google login button cleanup
+    if (this.googleLoginButton) {
+      this.googleLoginButton.destroy();
+      this.googleLoginButton = null;
+    }
   }
 }

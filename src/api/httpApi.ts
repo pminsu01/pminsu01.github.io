@@ -201,10 +201,7 @@ class HttpAPI {
   async fetchUserBoards(): Promise<Array<{ boardCode: string; title: string }>> {
     const data = await apiClient.get<UserBoardsResponse>('/users/boards');
 
-    console.log('[fetchUserBoards] Response data:', data);
-
     if (!Array.isArray(data?.boards)) {
-      console.warn('[fetchUserBoards] data.boards is not an array:', data);
       return [];
     }
 
@@ -285,6 +282,18 @@ class HttpAPI {
       boardCode: boardData.boardCode,
       title: boardData.title,
     };
+  }
+
+  /**
+   * Google OAuth 로그인
+   * Google ID Token을 백엔드로 전송하여 검증 후 자체 JWT 토큰 받기
+   */
+  async googleLogin(
+    googleIdToken: string
+  ): Promise<{ token: string; user: any; boards: { boards: Array<{ code: string; title: string }> } }> {
+    return apiClient.post('/auth/google', {
+      idToken: googleIdToken,
+    });
   }
 }
 

@@ -25,13 +25,11 @@ export class ChoreboardState {
   }
 
   subscribe(listener: () => void): () => void {
-    console.log('[StateManager] Subscriber added, total listeners:', this.listeners.size + 1);
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
   }
 
   private notify(): void {
-    console.log('[StateManager] Notifying', this.listeners.size, 'listeners');
     this.listeners.forEach(listener => listener());
   }
 
@@ -115,7 +113,6 @@ export class ChoreboardState {
 
   async addItem(title: string, assigneeId?: string): Promise<void> {
     if (!this.board) return;
-    console.log('[StateManager] addItem called:', title, 'assigneeId:', assigneeId);
     const newItem = await api.createChoreItem(this.board.boardCode, { title, assigneeId });
     // Optimistically attach assignee if server response lacks it
     if (!newItem.assignee && assigneeId) {
@@ -124,7 +121,6 @@ export class ChoreboardState {
         newItem.assignee = member;
       }
     }
-    console.log('[StateManager] API returned:', newItem);
     this.board.items.push(newItem);
     this.invalidateCache();
     this.notify();
@@ -224,7 +220,6 @@ export class ChoreboardState {
       await api.bulkUpdateAssignees(this.board.boardCode, decided.map(d => ({ id: d.item.id, assigneeId: d.memberId })));
       // Keep UI as-is regardless of response; no further action required.
     } catch (e) {
-      console.warn('[StateManager] Failed to persist random assignment in bulk:', e);
       // keep local optimistic assignment
     }
   }
@@ -246,7 +241,6 @@ export class ChoreboardState {
     try {
       await api.bulkUpdateAssignees(this.board.boardCode, [{ id: itemId, assigneeId }]);
     } catch (e) {
-      console.warn('[StateManager] Failed to update assignee on server:', e);
       // keep optimistic UI; optionally could refresh board here
     }
   }
@@ -296,7 +290,7 @@ export class ChoreboardState {
     try {
       await api.updateChoreItemOrder(this.board.boardCode, itemId, newSortOrder);
     } catch (e) {
-      console.warn('[StateManager] Failed to update order on server, keeping local order:', e);
+      // keep local order
     }
   }
 }

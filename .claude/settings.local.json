@@ -5,7 +5,9 @@
       "Bash(npm run:*)",
       "Bash(npx tsc:*)",
       "Bash(curl:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(lsof:*)",
+      "Bash(kill:*)"
     ],
     "deny": [],
     "ask": []

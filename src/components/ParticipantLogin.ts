@@ -3,9 +3,11 @@ import { showErrorPopup } from '../utils/domHelpers';
 import { navigateTo } from '../utils/navigation';
 import { isNetworkError } from '../utils/errors';
 import { saveToken } from '../utils/auth';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
 export class ParticipantLogin {
   private container: HTMLElement;
+  private googleLoginButton: GoogleLoginButton | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -41,9 +43,13 @@ export class ParticipantLogin {
             <span>또는</span>
           </div>
 
+          <div class="google-login-wrapper">
+            <!-- Google 로그인 버튼이 여기에 렌더링됩니다 -->
+          </div>
+
           <div class="alternative-actions">
-            <button class="btn-secondary btn-register" data-action="register">
-              ✨ 처음이신가요? 등록하기
+            <button class="btn-email-register btn-register" data-action="register">
+              이메일 가입하기
             </button>
           </div>
         </div>
@@ -51,6 +57,14 @@ export class ParticipantLogin {
     `;
 
     this.attachListeners();
+    this.setupGoogleLogin();
+  }
+
+  private setupGoogleLogin(): void {
+    const googleWrapper = this.container.querySelector('.google-login-wrapper') as HTMLElement;
+    if (googleWrapper) {
+      this.googleLoginButton = new GoogleLoginButton(googleWrapper, 'participant-login-google-button');
+    }
   }
 
   private attachListeners(): void {
@@ -96,19 +110,9 @@ export class ParticipantLogin {
       // localStorage 방식: 응답에서 토큰을 받아 localStorage에 저장
       const response = await api.login(userId);
 
-      console.log('[ParticipantLogin] Login response:', response);
-
       // JWT 토큰 저장
       if (response.token) {
         saveToken(response.token);
-        console.log('[ParticipantLogin] Token saved successfully');
-      } else {
-        console.error('[ParticipantLogin] No token in login response:', response);
-      }
-
-      // 보드 정보 로깅
-      if (response.boards) {
-        console.log('[ParticipantLogin] Boards in response:', response.boards);
       }
 
       // Navigate to board list
@@ -128,6 +132,10 @@ export class ParticipantLogin {
 
 
   destroy(): void {
-    // Cleanup if needed
+    // Cleanup Google login button
+    if (this.googleLoginButton) {
+      this.googleLoginButton.destroy();
+      this.googleLoginButton = null;
+    }
   }
 }
