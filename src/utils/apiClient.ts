@@ -55,6 +55,12 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
+      // 400 Bad Request - 잘못된 요청 형식
+      if (response.status === 400) {
+        const errorMessage = await this.extractErrorMessage(response);
+        throw new Error(errorMessage || '요청 형식이 올바르지 않습니다');
+      }
+
       // 401 Unauthorized 또는 403 Forbidden - 토큰 만료 또는 무효
       // Safari ITP로 인해 쿠키가 전송되지 않을 경우 403 발생 가능
       if (response.status === 401 || response.status === 403) {
