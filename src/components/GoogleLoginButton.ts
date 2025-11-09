@@ -2,10 +2,10 @@ import { api } from '../api/httpApi';
 import { saveToken } from '../utils/auth';
 import { navigateTo } from '../utils/navigation';
 import { showErrorPopup } from '../utils/domHelpers';
-import { getGoogleOAuthClientId, isWebView, logPlatformInfo } from '../utils/platform';
+import { isWebView, logPlatformInfo } from '../utils/platform';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
-const GOOGLE_CLIENT_ID = getGoogleOAuthClientId();
+// 웹 브라우저용 Google Client ID
 const GOOGLE_WEB_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 export class GoogleLoginButton {
@@ -15,24 +15,7 @@ export class GoogleLoginButton {
   constructor(container: HTMLElement, buttonId: string = 'google-login-button') {
     this.container = container;
     this.buttonId = buttonId;
-    this.initializeGoogleAuth();
     this.render();
-  }
-
-  private async initializeGoogleAuth(): Promise<void> {
-    // Capacitor 앱에서만 GoogleAuth 초기화
-    if (isWebView()) {
-      try {
-        await GoogleAuth.initialize({
-          clientId: GOOGLE_WEB_CLIENT_ID,
-          scopes: ['profile', 'email'],
-          grantOfflineAccess: true,
-        });
-        console.log('Capacitor GoogleAuth 초기화 완료');
-      } catch (error) {
-        console.error('Capacitor GoogleAuth 초기화 실패:', error);
-      }
-    }
   }
 
   private render(): void {
@@ -98,7 +81,7 @@ export class GoogleLoginButton {
 
   private setupGoogleButton(): void {
     try {
-      if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === '') {
+      if (!GOOGLE_WEB_CLIENT_ID || GOOGLE_WEB_CLIENT_ID === '') {
         console.error('Google Client ID가 설정되지 않았습니다.');
         this.showFallbackButton();
         return;
@@ -106,7 +89,7 @@ export class GoogleLoginButton {
 
       // Google Identity Services 초기화
       google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
+        client_id: GOOGLE_WEB_CLIENT_ID,
         callback: this.handleCredentialResponse.bind(this),
         auto_select: false,
         cancel_on_tap_outside: true,
