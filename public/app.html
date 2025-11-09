@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/chores_board.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>집안일 분담 앱</title>
+  <!-- Google Identity Services -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3114297455209940" crossorigin="anonymous"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // GitHub Pages SPA 라우팅 복원
+    // 404.html에서 저장한 경로를 복원하여 클라이언트 라우팅 실행
+    (function() {
+      var redirect = sessionStorage.getItem('redirect');
+      sessionStorage.removeItem('redirect');
+
+      if (redirect && redirect !== location.pathname + location.search + location.hash) {
+        // 저장된 경로로 히스토리 업데이트
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
