@@ -186,6 +186,11 @@ export class BoardList {
       </div>
       <div class="logout-dialog-body">
         <p>정말 로그아웃 하시겠습니까?</p>
+
+        <!-- Google AdSense 광고는 자동 광고로 표시됩니다 -->
+        <div class="logout-ad-container">
+          <p style="font-size: 12px; color: #9ca3af;">광고</p>
+        </div>
       </div>
       <div class="logout-dialog-footer">
         <button class="btn-secondary logout-cancel">취소</button>
@@ -417,6 +422,13 @@ export class BoardList {
         createBtn.disabled = false;
         createBtn.textContent = '생성';
 
+        // 3007 에러: 광고 시청 필요
+        if (error instanceof Error && error.message.includes('3007')) {
+          closePopup();
+          this.showAdDialog(title);
+          return;
+        }
+
         closePopup();
         showErrorPopup('보드 생성에 실패했습니다.');
       }
@@ -538,6 +550,111 @@ export class BoardList {
     }, 10);
   }
 
+
+  private showAdDialog(boardTitle: string): void {
+    const overlay = document.createElement('div');
+    overlay.className = 'ad-dialog-overlay';
+
+    const dialog = document.createElement('div');
+    dialog.className = 'ad-dialog';
+    dialog.innerHTML = `
+      <div class="ad-dialog-header">
+        <h3>광고 시청이 필요합니다</h3>
+      </div>
+      <div class="ad-dialog-body">
+        <p>보드 생성 제한에 도달했습니다.<br/>광고를 시청하고 계속 이용하세요.</p>
+
+        <!-- Google AdSense 광고 영역 -->
+        <div class="ad-container">
+          <ins class="adsbygoogle"
+               style="display:block; min-height:250px;"
+               data-ad-client="ca-pub-3114297455209940"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+      </div>
+      <div class="ad-dialog-footer">
+        <button class="btn-secondary ad-cancel">취소</button>
+        <button class="btn-primary ad-complete">광고 시청 완료</button>
+      </div>
+    `;
+
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+
+    // 광고 로드
+    setTimeout(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error('AdSense 광고 로드 실패:', e);
+      }
+    }, 100);
+
+    const cancelBtn = dialog.querySelector('.ad-cancel') as HTMLButtonElement;
+    const completeBtn = dialog.querySelector('.ad-complete') as HTMLButtonElement;
+
+    const closeDialog = () => {
+      overlay.remove();
+    };
+
+    // 취소 버튼
+    cancelBtn.addEventListener('click', closeDialog);
+
+    // 오버레이 클릭
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeDialog();
+      }
+    });
+
+    // 광고 시청 완료 버튼
+    completeBtn.addEventListener('click', async () => {
+      completeBtn.disabled = true;
+      completeBtn.textContent = '처리 중...';
+
+      try {
+        // 광고 시청 완료 API 호출
+        await api.submitAdView('google');
+
+        // 보드 생성 재시도
+        const response = await api.createBoard(boardTitle);
+
+        // Save to recent rooms and edit token
+        homeState.addRecentRoom({
+          boardCode: response.boardCode,
+          title: response.title,
+          hasEdit: true,
+          lastVisited: Date.now(),
+        });
+        homeState.saveEditToken(response.boardCode, response.editToken);
+
+        closeDialog();
+
+        // Navigate to the newly created board
+        navigateTo(`/boards/${response.boardCode}`);
+      } catch (error) {
+        completeBtn.disabled = false;
+        completeBtn.textContent = '광고 시청 완료';
+        closeDialog();
+        showErrorPopup('보드 생성에 실패했습니다. 다시 시도해주세요.');
+      }
+    });
+
+    // ESC 키 핸들러
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeDialog();
+        document.removeEventListener('keydown', handleEscape);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+
+    // 애니메이션
+    setTimeout(() => {
+      overlay.classList.add('show');
+    }, 10);
+  }
 
   destroy(): void {
     // Cleanup if needed

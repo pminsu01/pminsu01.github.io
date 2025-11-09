@@ -295,6 +295,16 @@ class HttpAPI {
       idToken: googleIdToken,
     });
   }
+
+  /**
+   * 광고 시청 완료 보상 요청
+   * 광고를 모두 시청한 후 호출
+   */
+  async submitAdView(adProvider: string = 'google'): Promise<void> {
+    await apiClient.post('/rewards/ad-view', {
+      adProvider,
+    });
+  }
 }
 
 export const api = new HttpAPI();
