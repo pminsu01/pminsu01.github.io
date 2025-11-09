@@ -3,9 +3,23 @@ import { saveToken } from '../utils/auth';
 import { navigateTo } from '../utils/navigation';
 import { showErrorPopup } from '../utils/domHelpers';
 
-// Google Client ID - 환경변수 또는 설정에서 가져오기
-// TODO: 실제 Google Cloud Console에서 발급받은 Client ID로 교체 필요
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+// 안드로이드 WebView 감지
+function isAndroidWebView(): boolean {
+  const ua = navigator.userAgent;
+  return /wv|Android.*Version\/\d+\.\d+/i.test(ua) && /Android/i.test(ua);
+}
+
+// 플랫폼에 따른 적절한 Google Client ID 선택
+function getGoogleClientId(): string {
+  if (isAndroidWebView()) {
+    // 안드로이드 WebView에서는 안드로이드 Client ID 사용
+    return import.meta.env.VITE_GOOGLE_ANDROID_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  }
+  // 웹 브라우저에서는 웹 Client ID 사용
+  return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+}
+
+const GOOGLE_CLIENT_ID = getGoogleClientId();
 
 export class GoogleLoginButton {
   private container: HTMLElement;
@@ -48,6 +62,12 @@ export class GoogleLoginButton {
 
   private setupGoogleButton(): void {
     try {
+      if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === '') {
+        console.error('Google Client ID가 설정되지 않았습니다.');
+        this.showFallbackButton();
+        return;
+      }
+
       // Google Identity Services 초기화
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -67,8 +87,15 @@ export class GoogleLoginButton {
           width: buttonElement.offsetWidth || 300,
           locale: 'ko',
         });
+
+        // 안드로이드 WebView에서 디버깅 로그
+        if (isAndroidWebView()) {
+          console.log('안드로이드 WebView에서 Google 로그인 버튼 렌더링 완료');
+          console.log('사용 중인 Client ID:', GOOGLE_CLIENT_ID.substring(0, 20) + '...');
+        }
       }
     } catch (error) {
+      console.error('Google 로그인 버튼 설정 오류:', error);
       this.showFallbackButton();
     }
   }
