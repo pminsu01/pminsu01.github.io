@@ -44,17 +44,6 @@ export function isIOS(): boolean {
  * 플랫폼에 따른 적절한 Google OAuth Client ID 반환
  */
 export function getGoogleOAuthClientId(): string {
-  if (isWebView()) {
-    // Android 또는 iOS 앱용 클라이언트 ID
-    if (isAndroid()) {
-      return import.meta.env.VITE_GOOGLE_ANDROID_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-    } else if (isIOS()) {
-      // iOS용 클라이언트 ID가 별도로 있다면 추가
-      return import.meta.env.VITE_GOOGLE_IOS_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-    }
-  }
-
-  // 웹 브라우저용 클라이언트 ID
   return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 }
 
