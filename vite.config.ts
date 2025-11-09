@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,6 +8,12 @@ export default defineConfig({
   build: {
     // 빌드 결과물이 저장될 폴더
     outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        app: resolve(__dirname, 'public/app.html'),
+      },
+    },
   },
 
   // 개발 서버 설정
