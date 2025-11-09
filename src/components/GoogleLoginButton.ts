@@ -2,24 +2,9 @@ import { api } from '../api/httpApi';
 import { saveToken } from '../utils/auth';
 import { navigateTo } from '../utils/navigation';
 import { showErrorPopup } from '../utils/domHelpers';
+import { getGoogleOAuthClientId, isWebView, logPlatformInfo } from '../utils/platform';
 
-// 안드로이드 WebView 감지
-function isAndroidWebView(): boolean {
-  const ua = navigator.userAgent;
-  return /wv|Android.*Version\/\d+\.\d+/i.test(ua) && /Android/i.test(ua);
-}
-
-// 플랫폼에 따른 적절한 Google Client ID 선택
-function getGoogleClientId(): string {
-  if (isAndroidWebView()) {
-    // 안드로이드 WebView에서는 안드로이드 Client ID 사용
-    return import.meta.env.VITE_GOOGLE_ANDROID_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-  }
-  // 웹 브라우저에서는 웹 Client ID 사용
-  return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-}
-
-const GOOGLE_CLIENT_ID = getGoogleClientId();
+const GOOGLE_CLIENT_ID = getGoogleOAuthClientId();
 
 export class GoogleLoginButton {
   private container: HTMLElement;
@@ -88,10 +73,10 @@ export class GoogleLoginButton {
           locale: 'ko',
         });
 
-        // 안드로이드 WebView에서 디버깅 로그
-        if (isAndroidWebView()) {
-          console.log('안드로이드 WebView에서 Google 로그인 버튼 렌더링 완료');
-          console.log('사용 중인 Client ID:', GOOGLE_CLIENT_ID.substring(0, 20) + '...');
+        // 플랫폼 정보 및 디버깅 로그 출력
+        if (isWebView()) {
+          logPlatformInfo();
+          console.log('WebView/앱에서 Google 로그인 버튼 렌더링 완료');
         }
       }
     } catch (error) {
