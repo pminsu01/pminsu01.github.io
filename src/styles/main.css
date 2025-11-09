@@ -2186,20 +2186,20 @@ textarea {
   line-height: 1.5;
 }
 
-/* Google AdSense 광고 영역 */
-.logout-ad-container {
-  margin: 16px 0;
-  min-height: 100px;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/*!* Google AdSense 광고 영역 *!*/
+/*.logout-ad-container {*/
+/*  margin: 16px 0;*/
+/*  min-height: 100px;*/
+/*  max-width: 100%;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*}*/
 
-.logout-ad-container .adsbygoogle {
-  max-width: 100%;
-  overflow: hidden;
-}
+/*.logout-ad-container .adsbygoogle {*/
+/*  max-width: 100%;*/
+/*  overflow: hidden;*/
+/*}*/
 
 .logout-dialog-footer {
   padding: 16px 24px 24px;
@@ -2215,94 +2215,94 @@ textarea {
   font-weight: 500;
 }
 
-/* Ad Dialog (3007 Error) */
-.ad-dialog-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  opacity: 0;
-  transition: opacity 0.2s ease-out;
-}
+/*!* Ad Dialog (3007 Error) *!*/
+/*.ad-dialog-overlay {*/
+/*  position: fixed;*/
+/*  inset: 0;*/
+/*  background: rgba(17, 24, 39, 0.6);*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  z-index: 2000;*/
+/*  opacity: 0;*/
+/*  transition: opacity 0.2s ease-out;*/
+/*}*/
 
-.ad-dialog-overlay.show {
-  opacity: 1;
-}
+/*.ad-dialog-overlay.show {*/
+/*  opacity: 1;*/
+/*}*/
 
-.ad-dialog {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  max-width: 500px;
-  width: 90%;
-  margin: 0 16px;
-  transform: scale(0.95);
-  transition: transform 0.2s ease-out;
-  animation: slideUp 0.2s ease-out;
-}
+/*.ad-dialog {*/
+/*  background: #ffffff;*/
+/*  border-radius: 16px;*/
+/*  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);*/
+/*  max-width: 500px;*/
+/*  width: 90%;*/
+/*  margin: 0 16px;*/
+/*  transform: scale(0.95);*/
+/*  transition: transform 0.2s ease-out;*/
+/*  animation: slideUp 0.2s ease-out;*/
+/*}*/
 
-.ad-dialog-overlay.show .ad-dialog {
-  transform: scale(1);
-}
+/*.ad-dialog-overlay.show .ad-dialog {*/
+/*  transform: scale(1);*/
+/*}*/
 
-.ad-dialog-header {
-  padding: 24px 24px 16px;
-  text-align: center;
-  border-bottom: 1px solid #e5e7eb;
-}
+/*.ad-dialog-header {*/
+/*  padding: 24px 24px 16px;*/
+/*  text-align: center;*/
+/*  border-bottom: 1px solid #e5e7eb;*/
+/*}*/
 
-.ad-dialog-header h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
+/*.ad-dialog-header h3 {*/
+/*  font-size: 20px;*/
+/*  font-weight: 600;*/
+/*  color: #111827;*/
+/*  margin: 0;*/
+/*}*/
 
-.ad-dialog-body {
-  padding: 24px;
-  text-align: center;
-}
+/*.ad-dialog-body {*/
+/*  padding: 24px;*/
+/*  text-align: center;*/
+/*}*/
 
-.ad-dialog-body p {
-  font-size: 16px;
-  color: #374151;
-  margin: 0 0 20px 0;
-  line-height: 1.5;
-}
+/*.ad-dialog-body p {*/
+/*  font-size: 16px;*/
+/*  color: #374151;*/
+/*  margin: 0 0 20px 0;*/
+/*  line-height: 1.5;*/
+/*}*/
 
-.ad-container {
-  margin: 20px 0;
-  min-height: 250px;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f9fafb;
-  border-radius: 8px;
-  padding: 16px;
-}
+/*.ad-container {*/
+/*  margin: 20px 0;*/
+/*  min-height: 250px;*/
+/*  max-width: 100%;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  background: #f9fafb;*/
+/*  border-radius: 8px;*/
+/*  padding: 16px;*/
+/*}*/
 
-.ad-container .adsbygoogle {
-  max-width: 100%;
-  min-height: 200px;
-}
+/*.ad-container .adsbygoogle {*/
+/*  max-width: 100%;*/
+/*  min-height: 200px;*/
+/*}*/
 
-.ad-dialog-footer {
-  padding: 16px 24px 24px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
+/*.ad-dialog-footer {*/
+/*  padding: 16px 24px 24px;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  gap: 12px;*/
+/*}*/
 
-.ad-dialog-footer button {
-  min-width: 120px;
-  padding: 10px 24px;
-  font-size: 15px;
-  font-weight: 500;
-}
+/*.ad-dialog-footer button {*/
+/*  min-width: 120px;*/
+/*  padding: 10px 24px;*/
+/*  font-size: 15px;*/
+/*  font-weight: 500;*/
+/*}*/
 
 /* Delete Confirmation Dialog */
 .delete-dialog-overlay {

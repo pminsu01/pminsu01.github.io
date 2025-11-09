@@ -188,9 +188,9 @@ export class BoardList {
         <p>정말 로그아웃 하시겠습니까?</p>
 
         <!-- Google AdSense 광고는 자동 광고로 표시됩니다 -->
-        <div class="logout-ad-container">
-          <p style="font-size: 12px; color: #9ca3af;">광고</p>
-        </div>
+<!--        <div class="logout-ad-container">-->
+<!--          <p style="font-size: 12px; color: #9ca3af;">광고</p>-->
+<!--        </div>-->
       </div>
       <div class="logout-dialog-footer">
         <button class="btn-secondary logout-cancel">취소</button>
