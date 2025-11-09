@@ -7,14 +7,15 @@
  * Capacitor WebView 환경인지 확인
  */
 export function isWebView(): boolean {
-  // Capacitor 플랫폼 확인
+  // Capacitor 플랫폼이 존재하는지 확인 (가장 확실한 방법)
   if (typeof window !== 'undefined' && (window as any).Capacitor) {
-    return true;
+    // Capacitor가 존재하고 네이티브 플랫폼인 경우만 true
+    const platform = (window as any).Capacitor.getPlatform();
+    return platform === 'android' || platform === 'ios';
   }
 
-  // 추가 WebView 감지 (Capacitor가 로드되지 않은 경우 대비)
-  const ua = navigator.userAgent;
-  return /wv|Android.*Version\/\d+\.\d+/i.test(ua) && /Android/i.test(ua);
+  // Capacitor가 없으면 무조건 웹 브라우저
+  return false;
 }
 
 /**

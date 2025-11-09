@@ -1295,6 +1295,39 @@ textarea {
   flex-shrink: 0;
 }
 
+/* Capacitor 네이티브 Google 로그인 버튼 */
+.btn-google-native {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-google-native:hover {
+  background: #f8f9fa;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+.btn-google-native:active {
+  background: #f1f3f4;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.30);
+}
+
+.btn-google-native svg {
+  flex-shrink: 0;
+}
+
 .alternative-actions {
   display: flex;
   flex-direction: column;
