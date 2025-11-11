@@ -209,21 +209,18 @@ export function navigateTo(path: string, replace: boolean = false): void {
 async function initializeApp() {
   // Initialize GoogleAuth plugin (required by @codetrix-studio/capacitor-google-auth)
   try {
-    const clientId = getGoogleOAuthClientId();
-    if (!clientId) {
-      console.warn('[GoogleAuth] VITE_GOOGLE_CLIENT_ID is empty. GoogleAuth.initialize will proceed without a clientId.');
-    }
+    const webClientId = getGoogleOAuthClientId();
 
     // Avoid duplicate initialization
     const w = window as any;
     if (!w.__googleAuthInitialized) {
       GoogleAuth.initialize({
-        clientId: clientId || undefined,
+        clientId: webClientId || undefined,  // 웹용 Client ID
         scopes: ['profile', 'email'],
         grantOfflineAccess: true,
       });
       w.__googleAuthInitialized = true;
-      console.log('[GoogleAuth] Initialized');
+      console.log('[GoogleAuth] Initialized with clientId:', webClientId ? 'YES' : 'NO');
       // Helpful platform logs for debugging
       try { logPlatformInfo(); } catch {}
     }

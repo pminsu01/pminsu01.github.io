@@ -42,9 +42,19 @@ export function isIOS(): boolean {
 
 /**
  * 플랫폼에 따른 적절한 Google OAuth Client ID 반환
+ * 웹: VITE_GOOGLE_CLIENT_ID
+ * 안드로이드 앱: VITE_GOOGLE_ANDROID_CLIENT_ID
+ * iOS 앱: VITE_GOOGLE_IOS_CLIENT_ID (미설정 시 안드로이드 ID 사용)
  */
 export function getGoogleOAuthClientId(): string {
-  return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  if (isAndroid()) {
+    return import.meta.env.VITE_GOOGLE_ANDROID_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  } else if (isIOS()) {
+    return import.meta.env.VITE_GOOGLE_IOS_CLIENT_ID || import.meta.env.VITE_GOOGLE_ANDROID_CLIENT_ID || import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  } else {
+    // 웹 브라우저
+    return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  }
 }
 
 /**
