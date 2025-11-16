@@ -11,8 +11,6 @@ import { state } from './utils/stateManager';
 import { api } from './api/httpApi';
 import { isNetworkError } from './utils/errors';
 import { showNetworkErrorPopup } from './utils/domHelpers';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import { getGoogleOAuthClientId, logPlatformInfo } from './utils/platform';
 
 type Route = 'login' | 'register' | 'home' | 'board' | 'boardList' | 'privacyPolicy' | 'userSecurity';
 
@@ -207,26 +205,6 @@ export function navigateTo(path: string, replace: boolean = false): void {
 
 // Initialize app
 async function initializeApp() {
-  // Initialize GoogleAuth plugin (required by @codetrix-studio/capacitor-google-auth)
-  try {
-    const webClientId = getGoogleOAuthClientId();
-
-    // Avoid duplicate initialization
-    const w = window as any;
-    if (!w.__googleAuthInitialized) {
-      GoogleAuth.initialize({
-        clientId: webClientId || undefined,  // 웹용 Client ID
-        scopes: ['profile', 'email'],
-        grantOfflineAccess: true,
-      });
-      w.__googleAuthInitialized = true;
-      console.log('[GoogleAuth] Initialized with clientId:', webClientId ? 'YES' : 'NO');
-      // Helpful platform logs for debugging
-      try { logPlatformInfo(); } catch {}
-    }
-  } catch (e) {
-    console.error('[GoogleAuth] Initialization failed:', e);
-  }
   const appContainer = document.querySelector<HTMLDivElement>('#app');
   if (!appContainer) {
     console.error('App container not found');

@@ -10,7 +10,11 @@
       "Bash(kill:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx cap:*)",
+      "Bash(./gradlew signingReport:*)",
+      "Bash(pkill:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []
