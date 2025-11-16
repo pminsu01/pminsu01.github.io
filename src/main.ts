@@ -11,6 +11,7 @@ import { state } from './utils/stateManager';
 import { api } from './api/httpApi';
 import { isNetworkError } from './utils/errors';
 import { showNetworkErrorPopup } from './utils/domHelpers';
+import { getGoogleOAuthClientId, logPlatformInfo } from './utils/platform';
 
 type Route = 'login' | 'register' | 'home' | 'board' | 'boardList' | 'privacyPolicy' | 'userSecurity';
 
@@ -205,6 +206,29 @@ export function navigateTo(path: string, replace: boolean = false): void {
 
 // Initialize app
 async function initializeApp() {
+  // Initialize GoogleAuth plugin if Capacitor is available (안드로이드 래퍼 앱에서만 동작)
+  try {
+    if (typeof window !== 'undefined' && (window as any).Capacitor) {
+      const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
+      const webClientId = getGoogleOAuthClientId();
+
+      // Avoid duplicate initialization
+      const w = window as any;
+      if (!w.__googleAuthInitialized) {
+        GoogleAuth.initialize({
+          clientId: webClientId || undefined,
+          scopes: ['profile', 'email'],
+          grantOfflineAccess: true,
+        });
+        w.__googleAuthInitialized = true;
+        console.log('[GoogleAuth] Initialized with clientId:', webClientId ? 'YES' : 'NO');
+        logPlatformInfo();
+      }
+    }
+  } catch (e) {
+    console.error('[GoogleAuth] Initialization failed (expected in web browser):', e);
+  }
+
   const appContainer = document.querySelector<HTMLDivElement>('#app');
   if (!appContainer) {
     console.error('App container not found');

@@ -2,6 +2,7 @@ import { api } from '../api/httpApi';
 import { saveToken } from '../utils/auth';
 import { navigateTo } from '../utils/navigation';
 import { showErrorPopup } from '../utils/domHelpers';
+import { isWebView, logPlatformInfo } from '../utils/platform';
 
 // 웹 브라우저용 Google Client ID
 const GOOGLE_WEB_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
@@ -23,8 +24,40 @@ export class GoogleLoginButton {
     buttonContainer.className = 'google-login-container';
     this.container.appendChild(buttonContainer);
 
-    // 웹에서는 Google Identity Services 사용
-    this.initializeGoogleSignIn();
+    // Capacitor 앱에서는 네이티브 플러그인 사용
+    if (isWebView()) {
+      this.renderNativeButton();
+    } else {
+      // 웹에서는 Google Identity Services 사용
+      this.initializeGoogleSignIn();
+    }
+  }
+
+  private renderNativeButton(): void {
+    // Capacitor 앱용 커스텀 Google 로그인 버튼
+    const buttonElement = document.getElementById(this.buttonId);
+    if (buttonElement) {
+      buttonElement.innerHTML = `
+        <button class="btn-google-native" id="native-google-btn">
+          <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            <path fill="none" d="M0 0h48v48H0z"/>
+          </svg>
+          Google 계정으로 로그인
+        </button>
+      `;
+
+      const nativeBtn = document.getElementById('native-google-btn');
+      if (nativeBtn) {
+        nativeBtn.addEventListener('click', () => this.handleNativeGoogleLogin());
+      }
+
+      logPlatformInfo();
+      console.log('Capacitor 네이티브 Google 로그인 버튼 렌더링 완료');
+    }
   }
 
   private async initializeGoogleSignIn(): Promise<void> {
@@ -76,6 +109,37 @@ export class GoogleLoginButton {
     } catch (error) {
       console.error('Google 로그인 버튼 설정 오류:', error);
       this.showFallbackButton();
+    }
+  }
+
+  private async handleNativeGoogleLogin(): Promise<void> {
+    try {
+      console.log('Capacitor 네이티브 Google 로그인 시작...');
+
+      // 런타임에 GoogleAuth 동적 로드 (안드로이드 래퍼 앱에서만 사용 가능)
+      const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
+
+      // Capacitor GoogleAuth로 로그인
+      const user = await GoogleAuth.signIn();
+      console.log('Google 로그인 성공:', user);
+
+      // idToken을 백엔드로 전송
+      if (user.authentication?.idToken) {
+        const result = await api.googleLogin(user.authentication.idToken);
+
+        // JWT 토큰 저장
+        if (result.token) {
+          saveToken(result.token);
+        }
+
+        // 보드 목록으로 이동
+        navigateTo('/boards');
+      } else {
+        throw new Error('ID Token을 받지 못했습니다.');
+      }
+    } catch (error) {
+      console.error('Capacitor Google 로그인 실패:', error);
+      showErrorPopup('Google 로그인에 실패했습니다. 다시 시도해주세요.');
     }
   }
 
